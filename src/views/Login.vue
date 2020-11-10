@@ -35,7 +35,7 @@
                     @input="loginError = ''"
                     outlined
                     dense
-                    autocomplete="password"
+                    autocomplete="current-password"
                     type="password"
                     name="password"
                   ></v-text-field>
@@ -55,8 +55,6 @@
 </template>
 
 <script>
-import axios from "@/plugins/axios.js";
-
 export default {
   name: "Login",
 
@@ -92,24 +90,10 @@ export default {
       if (this.$refs.form.validate()) {
         try {
           const { account, password } = this;
-          const encrypt = data => async () => await axios.get(`/api/Token/Crypt?text=${data}`);
-          const getEncryptedAccount = encrypt(account);
-          const getEncryptedPassword = encrypt(password);
-          const [{ data: encryptedAccount }, { data: encryptedPassword }] = await Promise.all([
-            getEncryptedAccount(),
-            getEncryptedPassword()
-          ]);
-          const loginData = {
-            userID: encryptedAccount,
-            password: encryptedPassword
-          };
-          const loginQueryString = new URLSearchParams(loginData).toString();
-          const res = await axios.get(`/api/Token/Login?${loginQueryString}`);
-
-          localStorage.setItem("token", res.data.Token);
+          await this.$store.dispatch("login", { account, password });
           this.$router.push({ name: "Home" });
         } catch (error) {
-          // TODO
+          // TODO 判斷是否為帳密輸入錯誤，是的話顯示錯誤
           console.log(error);
         }
       }

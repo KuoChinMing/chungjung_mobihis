@@ -30,6 +30,23 @@ const routes = [
         path: "/",
         name: "Home",
         component: load("Home")
+      },
+      {
+        path: "/patient/:id",
+        name: "Patient",
+        component: load("Patient"),
+        children: [
+          {
+            path: "vitalSign",
+            name: "VitalSign",
+            component: load("VitalSign")
+          }
+        ]
+      },
+      {
+        path: "/settings",
+        name: "Settings",
+        component: load("Settings")
       }
     ]
   }
