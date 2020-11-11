@@ -71,21 +71,6 @@ export default {
     requiredRule(value) {
       return !!value || "此欄位為必填項目";
     },
-    // async genQueryString(data) {
-    //   const urlData = JSON.parse(JSON.stringify(data));
-    //   const encrypt = data => async () => await axios.get(`/api/Token/Crypt?text=${data}`);
-    //   Object.keys(urlData).forEach(key => (urlData[key] = encrypt(key)));
-    //   const encryptedData = (
-    //     await Promise.all(Object.values(urlData).map(encrypt => encrypt()))
-    //   ).map(res => res.data);
-
-    //   for (const property in urlData) {
-    //     const index = Object.keys(urlData).indexOf(property);
-    //     urlData[property] = encryptedData[index];
-    //   }
-
-    //   return new URLSearchParams(urlData).toString();
-    // },
     async login() {
       if (this.$refs.form.validate()) {
         try {

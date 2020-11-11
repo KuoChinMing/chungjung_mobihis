@@ -32,14 +32,48 @@ const routes = [
         component: load("Home")
       },
       {
-        path: "/patient/:id",
-        name: "Patient",
+        path: "/discharged",
+        name: "Discharged",
+        component: load("Home")
+      },
+      {
+        path: "/stairs/:stairs",
+        name: "Stairs",
+        component: load("Home")
+      },
+      {
+        path: "/sector/:sector",
+        name: "Sector",
+        component: load("Home")
+      },
+      {
+        path: "/patient/:patientId",
         component: load("Patient"),
         children: [
           {
+            path: "",
+            name: "PatientProfile",
+            component: load("PatientProfile")
+          },
+          {
             path: "vitalSign",
-            name: "VitalSign",
-            component: load("VitalSign")
+            name: "PatientVitalSign",
+            component: load("PatientVitalSign")
+          },
+          {
+            path: "lab",
+            name: "PatientLab",
+            component: load("PatientLab")
+          },
+          {
+            path: "image",
+            name: "PatientImage",
+            component: load("PatientImage")
+          },
+          {
+            path: "exam",
+            name: "PatientExam",
+            component: load("PatientExam")
           }
         ]
       },
@@ -49,6 +83,12 @@ const routes = [
         component: load("Settings")
       }
     ]
+  },
+  {
+    path: "/404",
+    alias: "*",
+    name: "NotFound",
+    component: load("NotFound")
   }
 ];
 

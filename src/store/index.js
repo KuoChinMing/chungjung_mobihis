@@ -1,5 +1,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
+import axiosOriginal from "axios";
 import axios from "@/plugins/axios.js";
 
 Vue.use(Vuex);
@@ -18,7 +19,7 @@ export default new Vuex.Store({
     token(state, token) {
       state.token = token;
       localStorage.setItem("token", token);
-      axios.defaults.headers.common["Authorization"] = token;
+      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     },
     toggleHomeNavigationDrawer(state, isOpen) {
       state.homeNavigationDrawer = isOpen;
@@ -27,21 +28,11 @@ export default new Vuex.Store({
   actions: {
     async login({ commit }, { account, password }) {
       try {
-        const encrypt = data => async () => {
-          const params = { text: data };
-          return await axios.get(`/api/Token/Crypt`, { params });
-        };
-        const getEncryptedAccount = encrypt(account);
-        const getEncryptedPassword = encrypt(password);
-        const [{ data: encryptedAccount }, { data: encryptedPassword }] = await Promise.all([
-          getEncryptedAccount(),
-          getEncryptedPassword()
-        ]);
-
-        const loginParams = { userID: encryptedAccount, password: encryptedPassword };
+        const loginParams = { userID: account, password };
         const loginResponse = await axios.get("/api/Token/Login", { params: loginParams });
         const encryptedToken = loginResponse.data.Token;
-        const { data: token } = await axios.get(`/api/Token/Decrypt`, {
+        const BASE_URL = process.env.VUE_APP_BASE_URL;
+        const { data: token } = await axiosOriginal.get(`${BASE_URL}/api/Token/Decrypt`, {
           params: { text: encryptedToken }
         });
 

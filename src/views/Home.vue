@@ -1,10 +1,10 @@
 <template>
   <div>
-    <HomeAppBar color="primary" dark :title="appBarTitle" />
+    <HomeAppBar color="primary" dark title="我的關注病患" />
     <HomeNavigationDrawer
       :value="homeNavigationDrawer"
       @input="toggleHomeNavigationDrawer"
-      absolute
+      fixed
     ></HomeNavigationDrawer>
 
     <v-container fluid>
@@ -19,39 +19,132 @@
         </v-col>
 
         <v-col cols="12">
-          <v-card>
+          <v-card outlined>
             <v-tabs center-active show-arrows>
+              <v-tab>全部</v-tab>
               <v-tab>醫師 1 號</v-tab>
               <v-tab>醫師 2 號</v-tab>
               <v-tab>醫師 3 號</v-tab>
               <v-tab>醫師 4 號</v-tab>
             </v-tabs>
-          </v-card>
-        </v-col>
 
-        <v-col v-for="i in 10" :key="i">
-          <v-card class="mx-auto" max-width="344" outlined>
-            <v-list-item three-line>
-              <v-list-item-content>
-                <div class="overline mb-4">
-                  OVERLINE
-                </div>
-                <v-list-item-title class="headline mb-1">
-                  Headline 5
-                </v-list-item-title>
-                <v-list-item-subtitle
-                  >Greyhound divisely hello coldly fonwderfully</v-list-item-subtitle
+            <v-divider></v-divider>
+
+            <v-container fluid>
+              <v-row>
+                <v-col
+                  v-for="(patient, index) in patientList"
+                  :key="index"
+                  @click="
+                    $router.push({ name: 'PatientProfile', params: { patientId: patient.CHTNO } })
+                  "
                 >
-              </v-list-item-content>
+                  <v-card class="mx-auto" max-width="400" min-width="240">
+                    <v-list-item>
+                      <v-list-item-content>
+                        <v-list-item-title class="mb-3">
+                          <v-row no-gutters align="center">
+                            <v-col cols="auto" class="text-body-1">
+                              <span>{{ patient.BedNo }}</span>
+                              <span class="ml-3">
+                                <!-- :class="[patient.gender == 1 ? 'light-blue--text' : 'pink--text']" -->
+                                {{ patient.CNM }}
+                              </span>
+                            </v-col>
+                            <v-col cols="auto" class="ml-auto">
+                              <v-chip
+                                v-if="patient.DNRFlag == 1"
+                                class="ml-1 px-2"
+                                label
+                                small
+                                dark
+                                color="pink "
+                                >D</v-chip
+                              >
+                              <v-chip
+                                v-if="patient.CriticalFlag == 1"
+                                class="ml-1 px-2"
+                                label
+                                small
+                                dark
+                                color="deep-orange "
+                                >C</v-chip
+                              >
+                              <v-chip
+                                v-if="patient.DrugTag == 'True'"
+                                class="ml-1 px-2"
+                                label
+                                small
+                                dark
+                                color="green"
+                                >藥</v-chip
+                              >
+                              <v-chip
+                                v-if="patient.AllergyFlag == 1"
+                                class="ml-1 px-2"
+                                label
+                                small
+                                dark
+                                color="purple "
+                                >敏</v-chip
+                              >
+                              <v-chip
+                                v-if="patient.ICCardNote == 1"
+                                class="ml-1 px-2"
+                                label
+                                small
+                                dark
+                                color="light-blue "
+                                >註</v-chip
+                              >
+                              <v-chip
+                                v-if="patient.DangerFlag == 1"
+                                class="ml-1 px-2"
+                                label
+                                small
+                                dark
+                                color="red "
+                                >危</v-chip
+                              >
+                              <v-chip
+                                v-if="patient.RemindFlag == 1"
+                                class="ml-1 px-2"
+                                label
+                                small
+                                dark
+                                color="orange "
+                                >警</v-chip
+                              >
+                            </v-col>
+                          </v-row>
+                        </v-list-item-title>
 
-              <v-list-item-avatar tile size="80" color="grey"></v-list-item-avatar>
-            </v-list-item>
+                        <v-row no-gutters align="center" class="mb-3">
+                          <v-col cols="auto" class="text-body-2">
+                            <span>{{ patient.CHTNO }}</span>
+                            <span class="ml-1">({{ fullAge(patient.age) }})</span>
+                          </v-col>
+                          <v-col cols="auto" class="ml-auto text-body-2">
+                            <v-chip v-if="patient.CAS" outlined small class="px-2" color="red">
+                              CAS {{ patient.CAS }}
+                            </v-chip>
+                            <time class="ml-1" datetime="2018-07-07">2018/07/07</time>
+                          </v-col>
+                        </v-row>
 
-            <v-card-actions>
-              <v-btn outlined rounded text>
-                Button
-              </v-btn>
-            </v-card-actions>
+                        <v-list-item-subtitle>
+                          <span>
+                            {{ patient.VSName }} | {{ patient.RName }} |
+                            {{ patient.NPName || "--" }} |
+                            {{ patient.IName }}
+                          </span>
+                        </v-list-item-subtitle>
+                      </v-list-item-content>
+                    </v-list-item>
+                  </v-card>
+                </v-col>
+              </v-row>
+            </v-container>
           </v-card>
         </v-col>
       </v-row>
@@ -77,7 +170,8 @@ export default {
 
   data() {
     return {
-      appBarTitle: "我的關注病患",
+      patientList: [],
+
       searchSelectedCategory: null,
       searchKeyword: "",
       searchCategories: [
@@ -96,11 +190,15 @@ export default {
 
   async created() {
     const params = { requestID: this.account, qryType: "DR", parameter: this.account };
-    const res = await axios.get("/api/AdmissionPatient", { params });
-    console.log(res);
+    const { data: patientList } = await axios.get("/api/AdmissionPatient", { params });
+    this.patientList = patientList;
+    console.log(this.patientList);
   },
 
   methods: {
+    fullAge(age) {
+      return `${+age.slice(0, 3)}Y${age.slice(3, 5)}M`;
+    },
     selectCateogry(selectedCategory) {
       this.searchSelectedCategory = selectedCategory;
     },
