@@ -4,7 +4,6 @@
 
     <v-container fluid>
       <v-row>
-        <v-col cols="12"> </v-col>
         <v-col cols="12">
           <v-card outlined>
             <v-tabs center-active show-arrows>
@@ -18,7 +17,7 @@
               <v-tab :to="{ name: 'NotFound' }" exact>病理報告</v-tab>
               <v-tab :to="{ name: 'NotFound' }" exact>住院用藥</v-tab>
               <v-tab :to="{ name: 'NotFound' }" exact>住院病例</v-tab>
-              <v-tab :to="{ name: 'NotFound' }" exact>照片上傳</v-tab>
+              <v-tab :to="{ name: 'PatientPhoto' }" exact>照片上傳</v-tab>
               <v-tab :to="{ name: 'NotFound' }" exact>醫師註記</v-tab>
               <v-tab :to="{ name: 'NotFound' }" exact>院內連結</v-tab>
               <v-tab :to="{ name: 'NotFound' }" exact>會診紀錄</v-tab>

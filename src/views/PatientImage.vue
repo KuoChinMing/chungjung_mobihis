@@ -1,11 +1,9 @@
 <template>
-  <div>
-    <h1>PatientImage</h1>
-  </div>
+  <h1>PatientImage</h1>
 </template>
 
 <script>
 export default {
-  name: 'PatientImage'
-}
+  name: "PatientImage"
+};
 </script>

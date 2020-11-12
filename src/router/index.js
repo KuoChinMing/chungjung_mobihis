@@ -1,7 +1,5 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-// import axios from "@/plugins/axios";
-
 Vue.use(VueRouter);
 
 function load(component) {
@@ -47,7 +45,7 @@ const routes = [
         component: load("Home")
       },
       {
-        path: "/patient/:patientId",
+        path: "/patient/:patientId/:admissionKey",
         component: load("Patient"),
         children: [
           {
@@ -74,6 +72,11 @@ const routes = [
             path: "exam",
             name: "PatientExam",
             component: load("PatientExam")
+          },
+          {
+            path: "photo",
+            name: "PatientPhoto",
+            component: load("PatientPhoto")
           }
         ]
       },

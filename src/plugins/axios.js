@@ -34,6 +34,19 @@ axiosInstrance.interceptors.request.use(
   }
 );
 
+// TODO: response 401 router push login
+// axiosInstrance.interceptors.response.use(
+//   async function(res) {
+//     if (res.status === 401) {
+//       router.push({ name: "Login" });
+//     }
+//     return res;
+//   },
+//   function(error) {
+//     return Promise.reject(error);
+//   }
+// );
+
 const token = localStorage.getItem("token") || null;
 if (token) {
   axiosInstrance.defaults.headers.common["Authorization"] = `Bearer ${token}`;
