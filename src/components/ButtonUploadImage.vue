@@ -2,8 +2,7 @@
   <div>
     <label class="action d-flex align-items-center" for="uploadImage">
       <v-icon color="primary">mdi-cloud-upload</v-icon>
-      上傳
-
+      <span class="ml-2">照片上傳</span>
       <input
         type="file"
         id="uploadImage"
@@ -17,9 +16,8 @@
 </template>
 
 <script>
-import axiosOriginal from "axios";
 import { mapState } from "vuex";
-// import axios from "@/plugins/axios";
+import axios from "@/plugins/axios";
 
 export default {
   name: "ButtonUploadImage",
@@ -42,19 +40,29 @@ export default {
     ...mapState(["token"])
   },
 
+  created() {},
+
   methods: {
     async uploadImage() {
       const image = this.$refs.image.files[0];
       const BASE_URL = process.env.VUE_APP_BASE_URL;
-      const params = { mrno: "test", docno: "test" };
-      const res = await axiosOriginal.post(`${BASE_URL}/api/Upload`, image, {
+      const formData = new FormData();
+      formData.append("file", image);
+
+      const params = {
+        mrno: this.$route.params.patientId,
+        patientName: "EBM",
+        section: "CRS",
+        time: "手術前",
+        imageType: "傷口治療前",
+        bodyPart: "頭部"
+      };
+
+      const res = await axios.post(`${BASE_URL}/api/UploadOP`, formData, {
         params,
-        data: image,
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${this.token}`
-        }
+        headers: { "Content-Type": "multipart/form-data" }
       });
+
       console.log(res);
     },
 

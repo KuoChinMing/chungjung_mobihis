@@ -1,6 +1,6 @@
 <template>
   <v-app-bar v-bind="$attrs" v-on="$listeners">
-    <v-btn icon :to="{ name: 'Home' }">
+    <v-btn icon :to="{ name: 'Home' }" exact>
       <v-icon>mdi-chevron-left</v-icon>
     </v-btn>
 

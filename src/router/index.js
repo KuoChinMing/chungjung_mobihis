@@ -1,5 +1,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
+import axios from "@/plugins/axios";
+
 Vue.use(VueRouter);
 
 function load(component) {
@@ -45,7 +47,7 @@ const routes = [
         component: load("Home")
       },
       {
-        path: "/patient/:patientId/:admissionKey",
+        path: "/patient/:patientId/:admissionKey/:inHosDate",
         component: load("Patient"),
         children: [
           {
@@ -99,25 +101,33 @@ const router = new VueRouter({
   routes
 });
 
+// if token is not exist, redirect to login
 router.beforeEach(async (to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {
-    try {
-      const token = localStorage.getItem("token");
-      // TODO token 驗證
-      // await axios.post("/auth/token", { token });
-      if (token) {
-        next();
-      } else {
-        throw new Error("login error");
-      }
-    } catch (error) {
-      console.log(error);
-      localStorage.removeItem("token");
-      next({ name: "Login", params: to.params });
+    const token = localStorage.getItem("token");
+    if (token) {
+      next();
+    } else {
+      next({ name: "Login", query: { redirect: to.fullPath } });
     }
   } else {
     next();
   }
 });
+
+// if response 401 unauthorized, redirect to login
+axios.interceptors.response.use(
+  async function(res) {
+    return res;
+  },
+  async function(error) {
+    if (error.response.status === 401) {
+      const currentPath = router.history.current.fullPath;
+      localStorage.removeItem("token");
+      await router.push({ name: "Login", query: { redirect: currentPath } });
+    }
+    return Promise.reject(error);
+  }
+);
 
 export default router;

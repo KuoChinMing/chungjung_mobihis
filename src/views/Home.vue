@@ -18,7 +18,7 @@
           />
         </v-col>
 
-        <v-col cols="12" v-if="isPatientListAllLoaded">
+        <v-col cols="12" v-if="patientListAll">
           <v-tabs center-active show-arrows>
             <v-tab @click="switchPatientListByDoctor('all')">全部</v-tab>
             <v-tab
@@ -38,7 +38,11 @@
                 @click="
                   $router.push({
                     name: 'PatientProfile',
-                    params: { patientId: patient.CHTNO, admissionKey: patient.AdmissionKey }
+                    params: {
+                      patientId: patient.CHTNO,
+                      admissionKey: patient.AdmissionKey,
+                      inHosDate: patient.InHosDate
+                    }
                   })
                 "
               >
@@ -152,6 +156,11 @@
             </v-row>
           </v-container>
         </v-col>
+        <v-col cols="12" v-else>
+          <div class="text-center py-3">
+            <v-progress-circular indeterminate color="primary"></v-progress-circular>
+          </div>
+        </v-col>
       </v-row>
     </v-container>
   </div>
@@ -177,8 +186,7 @@ export default {
     return {
       doctors: [],
       patientList: [],
-      patientListAll: [],
-      isPatientListAllLoaded: false,
+      patientListAll: null,
       searchSelectedCategory: null,
       searchKeyword: "",
       searchCategories: [
@@ -196,10 +204,8 @@ export default {
   },
 
   async created() {
-    this.isPatientListAllLoaded = false;
     await this.getPatientList(this.account, "DR", this.account);
     this.patientList = this.patientListAll;
-    this.isPatientListAllLoaded = true;
     this.doctors = this.getPatientsDoctor();
     console.log(this.patientList);
   },

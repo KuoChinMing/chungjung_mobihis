@@ -2,19 +2,22 @@ import Vue from "vue";
 import Vuex from "vuex";
 import axiosOriginal from "axios";
 import axios from "@/plugins/axios.js";
+import jwt_decode from "jwt-decode";
 
 Vue.use(Vuex);
+
+const token = localStorage.getItem("token") || null;
+const tokenPayload = token ? jwt_decode(token) : {};
 
 export default new Vuex.Store({
   state: {
     homeNavigationDrawer: false,
-    token: localStorage.getItem("token") || null,
-    account: localStorage.getItem("account") || null
+    token: token,
+    account: tokenPayload["unique_name"] || ""
   },
   mutations: {
     account(state, account) {
       state.account = account;
-      localStorage.setItem("account", account);
     },
     token(state, token) {
       state.token = token;

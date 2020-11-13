@@ -43,7 +43,7 @@
                 <v-card-actions>
                   <v-btn text color="primary">註冊</v-btn>
                   <v-spacer></v-spacer>
-                  <v-btn depressed color="primary" @click="login">登入</v-btn>
+                  <v-btn depressed color="primary" :loading="isLogining" @click="login">登入</v-btn>
                 </v-card-actions>
               </v-form>
             </v-card>
@@ -63,7 +63,8 @@ export default {
       valid: true,
       loginError: "",
       account: null,
-      password: null
+      password: null,
+      isLogining: false
     };
   },
 
@@ -75,8 +76,10 @@ export default {
       if (this.$refs.form.validate()) {
         try {
           const { account, password } = this;
+          this.isLogining = true;
           await this.$store.dispatch("login", { account, password });
-          this.$router.push({ name: "Home" });
+          this.isLogining = false;
+          this.$router.push(this.$route.query.redirect || { name: "Home" });
         } catch (error) {
           // TODO 判斷是否為帳密輸入錯誤，是的話顯示錯誤
           console.log(error);
