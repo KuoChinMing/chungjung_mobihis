@@ -12,20 +12,23 @@
               <span class="text-body-1">病床號: 1234</span>
               <span class="ml-2 text-body-1">病歷號: {{ $route.params.patientId }}</span>
             </div>
+            <div>
+              <span>TODO: 上面的是假資料</span>
+            </div>
           </div>
         </v-col>
       </v-row>
       <v-row>
         <v-col cols="12">
           <v-tabs center-active show-arrows>
-            <v-tab :to="{ name: 'PatientProfile' }" exact>
+            <v-tab :to="{ name: 'PatientProfile', params: $route.params }" exact>
               病患首頁
             </v-tab>
-            <v-tab :to="{ name: 'PatientPhoto' }" exact>照片上傳</v-tab>
-            <v-tab :to="{ name: 'PatientVitalSign' }" exact>生命徵象</v-tab>
-            <v-tab :to="{ name: 'PatientLab' }" exact>檢驗報告</v-tab>
-            <v-tab :to="{ name: 'PatientImage' }" exact>影像調閱</v-tab>
-            <v-tab :to="{ name: 'PatientExam' }" exact>檢查報告</v-tab>
+            <v-tab :to="{ name: 'PatientPhoto', params: $route.params }" exact>照片上傳</v-tab>
+            <v-tab :to="{ name: 'PatientVitalSign', params: $route.params }" exact>生命徵象</v-tab>
+            <v-tab :to="{ name: 'PatientLab', params: $route.params }" exact>檢驗報告</v-tab>
+            <v-tab :to="{ name: 'PatientImage', params: $route.params }" exact>影像調閱</v-tab>
+            <v-tab :to="{ name: 'PatientExam', params: $route.params }" exact>檢查報告</v-tab>
             <v-tab :to="{ name: 'NotFound' }" exact>特殊檢查</v-tab>
             <v-tab :to="{ name: 'NotFound' }" exact>各類報告</v-tab>
             <v-tab :to="{ name: 'NotFound' }" exact>病理報告</v-tab>
@@ -36,7 +39,7 @@
             <v-tab :to="{ name: 'NotFound' }" exact>院內連結</v-tab>
             <v-tab :to="{ name: 'NotFound' }" exact>會診紀錄</v-tab>
           </v-tabs>
-          
+
           <keep-alive>
             <router-view />
           </keep-alive>
@@ -54,16 +57,6 @@ export default {
 
   components: {
     PatientAppBar
-  },
-
-  data() {
-    return {
-      patientId: this.$route.params.patientId
-    };
-  },
-
-  created() {
-    // const { patientId, admissionKey, inHosDate } = this.$route.params;
   }
 };
 </script>

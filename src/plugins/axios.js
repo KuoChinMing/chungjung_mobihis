@@ -26,7 +26,9 @@ async function EncryptData(data) {
 // 所有 request 參數都要先加密
 axiosInstrance.interceptors.request.use(
   async function(config) {
-    config.params = await EncryptData(config.params);
+    if (config.params) {
+      config.params = await EncryptData(config.params);
+    }
     return config;
   },
   function(error) {

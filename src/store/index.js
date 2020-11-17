@@ -30,20 +30,16 @@ export default new Vuex.Store({
   },
   actions: {
     async login({ commit }, { account, password }) {
-      try {
-        const loginParams = { userID: account, password };
-        const loginResponse = await axios.get("/api/Token/Login", { params: loginParams });
-        const encryptedToken = loginResponse.data.Token;
-        const BASE_URL = process.env.VUE_APP_BASE_URL;
-        const { data: token } = await axiosOriginal.get(`${BASE_URL}/api/Token/Decrypt`, {
-          params: { text: encryptedToken }
-        });
+      const loginParams = { userID: account, password };
+      const loginResponse = await axios.get("/api/Token/Login", { params: loginParams });
+      const encryptedToken = loginResponse.data.Token;
+      const BASE_URL = process.env.VUE_APP_BASE_URL;
+      const { data: token } = await axiosOriginal.get(`${BASE_URL}/api/Token/Decrypt`, {
+        params: { text: encryptedToken }
+      });
 
-        commit("account", account);
-        commit("token", token);
-      } catch (error) {
-        console.log(error);
-      }
+      commit("account", account);
+      commit("token", token);
     }
   },
   modules: {}

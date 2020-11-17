@@ -4,12 +4,12 @@
       <v-menu offset-y>
         <template v-slot:activator="{ on, attrs }">
           <v-btn text v-bind="attrs" v-on="on">
-            {{ selectedCategory.label }}
+            {{ innerSelectedCategory.label }}
             <v-icon small>mdi-chevron-down</v-icon>
           </v-btn>
         </template>
         <v-list dense>
-          <v-list-item-group v-model="selectedCategory">
+          <v-list-item-group v-model="innerSelectedCategory">
             <v-list-item v-for="(category, index) in categories" :key="index" :value="category">
               <v-list-item-title>{{ category.label }}</v-list-item-title>
             </v-list-item>
@@ -28,29 +28,31 @@ export default {
   props: {
     categories: {
       type: Array,
-      default: () => [
-        {
-          label: "",
-          value: null
-        }
-      ],
-      required: true
+      default: () => null,
+      required: false
+    },
+    selectedCategory: {
+      type: Object,
+      default: () => null,
+      required: false
     }
   },
 
   data() {
     return {
-      selectedCategory: null
+      innerSelectedCategory: null
     };
   },
 
-  created() {
-    this.selectedCategory = this.categories[0];
-  },
-
   watch: {
-    selectedCategory(selectedCategory) {
-      this.$emit("selectCateogry", JSON.parse(JSON.stringify(selectedCategory)));
+    innerSelectedCategory(selectedCategory) {
+      this.$emit("selectCateogry", selectedCategory);
+    },
+    selectedCategory: {
+      handler(newValue) {
+        this.innerSelectedCategory = newValue || this.selectedCategory || this.categories[0];
+      },
+      immediate: true
     }
   },
 

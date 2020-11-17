@@ -28,23 +28,29 @@ const routes = [
     children: [
       {
         path: "/",
-        name: "Home",
-        component: load("Home")
-      },
-      {
-        path: "/discharged",
-        name: "Discharged",
-        component: load("Home")
-      },
-      {
-        path: "/stairs/:stairs",
-        name: "Stairs",
-        component: load("Home")
-      },
-      {
-        path: "/sector/:sector",
-        name: "Sector",
-        component: load("Home")
+        component: load("HomeBaseLayout"),
+        children: [
+          {
+            path: "",
+            name: "Home",
+            component: load("Home")
+          },
+          {
+            path: "/discharged",
+            name: "Discharged",
+            component: load("Discharged")
+          },
+          {
+            path: "/station/:station",
+            name: "Station",
+            component: load("Home")
+          },
+          {
+            path: "/section/:section",
+            name: "Section",
+            component: load("Home")
+          }
+        ]
       },
       {
         path: "/patient/:patientId/:admissionKey/:inHosDate",
@@ -97,8 +103,14 @@ const routes = [
   }
 ];
 
+const scrollBehavior = function() {
+  // to, from, savedPosition
+  return { x: 0, y: 0 };
+};
+
 const router = new VueRouter({
-  routes
+  routes,
+  scrollBehavior
 });
 
 // if token is not exist, redirect to login
@@ -121,7 +133,7 @@ axios.interceptors.response.use(
     return res;
   },
   async function(error) {
-    if (error.response.status === 401) {
+    if (error.response?.status === 401) {
       const currentPath = router.history.current.fullPath;
       localStorage.removeItem("token");
       await router.push({ name: "Login", query: { redirect: currentPath } });

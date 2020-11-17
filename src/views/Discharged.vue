@@ -1,17 +1,20 @@
 <template>
   <v-container fluid>
-    <!-- TODO home page 抽成 component -->
     <v-row>
       <v-col cols="12">
-        <CategorySearch
-          v-model="searchKeyword"
-          :categories="searchCategories"
-          :selectedCategory="searchSelectedCategory"
-          @selectCateogry="selectCateogry"
-          @search="search"
-        />
+        <!-- TODO 實作出院病患頁上方選擇日期按鈕 -->
+        <v-menu offset-y :close-on-content-click="false" max-width="290">
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn color="white" rounded large v-on="on" v-bind="attrs" width="100%" height="48">
+              {{ todo }}
+            </v-btn>
+          </template>
+          <v-date-picker v-model="todo" scrollable range></v-date-picker>
+        </v-menu>
       </v-col>
+    </v-row>
 
+    <v-row>
       <v-col cols="12" v-if="!isPatientListAllLoading">
         <div v-if="patientListAll && patientListAll.length > 0">
           <v-tabs v-model="doctorTab" center-active show-arrows>
@@ -169,30 +172,18 @@
 
 <script>
 import { mapState } from "vuex";
-import CategorySearch from "@/components/CategorySearch.vue";
 import axios from "@/plugins/axios.js";
 
 export default {
   name: "Home",
 
-  components: {
-    CategorySearch
-  },
-
   data() {
     return {
+      todo: [],
+
       doctorTab: 0,
       isPatientListAllLoading: false,
-      patientListAll: null,
-      searchSelectedCategory: null,
-      searchKeyword: "",
-      searchCategories: [
-        { label: "科別碼", value: "SEC" },
-        { label: "病床號", value: "BED" },
-        { label: "病歷號", value: "MR" },
-        { label: "醫師碼", value: "DR" },
-        { label: "護理站代碼", value: "WARD" }
-      ]
+      patientListAll: null
     };
   },
 
@@ -221,32 +212,30 @@ export default {
     }
   },
 
-  watch: {
-    $route: {
-      handler(to) {
-        switch (to.name) {
-          case "Home": {
-            const { qryType, parameter } = to.query;
-            return this.searchPatient(qryType, parameter);
-          }
-          case "Discharged": {
-            // TODO 出院病患搜尋
-            const { qryType, parameter } = to.query;
-            return this.searchPatient(qryType, parameter);
-          }
-          case "Station": {
-            return this.searchPatient("WARD", to.params.station);
-          }
-          case "Section": {
-            return this.searchPatient("SEC", to.params.section);
-          }
-        }
-      },
-      immediate: true
-    }
+  async created() {
+    this.patientListAll = await this.getPatientList();
   },
 
   methods: {
+    async getPatientList() {
+      try {
+        this.isPatientListAllLoading = true;
+        const params = {
+          requestID: this.account,
+          qryType: "DR",
+          parameter: this.account,
+          disFlag: "1",
+          sDate: "2020/11/01",
+          eDate: "2020/11/20"
+        };
+        const { data: patientListAll } = await axios.get("/api/DischargedPatient", { params });
+        return patientListAll;
+      } catch (error) {
+        console.log(error);
+      } finally {
+        this.isPatientListAllLoading = false;
+      }
+    },
     RocToBc(time) {
       const year = +time.slice(0, 3) + 1911;
       const month = time.slice(3, 5);
@@ -254,44 +243,8 @@ export default {
 
       return `${year}/${month}/${date}`;
     },
-    async searchPatient(qryType, parameter) {
-      this.searchSelectedCategory =
-        this.searchCategories.find(category => category.value === qryType) ||
-        this.searchCategories[0];
-      this.searchKeyword = parameter;
-
-      try {
-        this.isPatientListAllLoading = true;
-        if (!qryType && !parameter) {
-          this.patientListAll = await this.getPatientList(this.account, "DR", this.account);
-        } else {
-          this.patientListAll = await this.getPatientList(this.account, qryType, parameter);
-        }
-      } catch (error) {
-        console.log(error);
-      } finally {
-        this.isPatientListAllLoading = false;
-      }
-    },
     fullAge(age) {
       return `${+age.slice(0, 3)}Y${age.slice(3, 5)}M`;
-    },
-    selectCateogry(selectedCategory) {
-      this.searchSelectedCategory = selectedCategory;
-    },
-    async search() {
-      if (!this.searchKeyword || !this.searchKeyword.trim()) return;
-
-      this.$router.push({
-        name: "Home",
-        query: { qryType: this.searchSelectedCategory.value, parameter: this.searchKeyword }
-      });
-    },
-    // TODO: 問 vivi，用醫生名稱判斷會有重複的問題
-    async getPatientList(requestID, qryType, parameter) {
-      const params = { requestID, qryType, parameter };
-      const { data: patientListAll } = await axios.get("/api/AdmissionPatient", { params });
-      return patientListAll;
     }
   }
 };

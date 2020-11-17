@@ -5,15 +5,20 @@
         <v-row>
           <v-col>
             <v-card max-width="330" class="mx-auto">
-              <v-card-title class="justify-center flex-column pb-0">
-                <img src="@/assets/logo.png" alt="Logo" class="mb-2" width="80%" />
+              <v-card-title class="justify-center flex-column">
+                <img src="@/assets/logo.png" alt="Logo" width="80%" />
                 <h1 class="text-subtitle-1 text-center" style="word-break: break-word;">
-                  MobiHIS
+                  LiveAid System
                 </h1>
               </v-card-title>
-              <v-form ref="form" v-model="valid" lazy-validation @submit.prevent="login">
-                <v-card-text class="pb-0">
-                  <input type="submit" class="d-none" />
+              <v-card-text class="pb-0">
+                <v-form
+                  ref="form"
+                  v-model="valid"
+                  lazy-validation
+                  id="login"
+                  @submit.prevent="login"
+                >
                   <v-text-field
                     v-model="account"
                     :label="'帳號'"
@@ -39,13 +44,15 @@
                     type="password"
                     name="password"
                   ></v-text-field>
-                </v-card-text>
-                <v-card-actions>
-                  <v-btn text color="primary">註冊</v-btn>
-                  <v-spacer></v-spacer>
-                  <v-btn depressed color="primary" :loading="isLogining" @click="login">登入</v-btn>
-                </v-card-actions>
-              </v-form>
+                </v-form>
+              </v-card-text>
+              <v-card-actions>
+                <v-btn text color="primary">註冊</v-btn>
+                <v-spacer></v-spacer>
+                <v-btn depressed color="primary" :loading="isLogining" type="submit" form="login">
+                  登入
+                </v-btn>
+              </v-card-actions>
             </v-card>
           </v-col>
         </v-row>
@@ -78,11 +85,13 @@ export default {
           const { account, password } = this;
           this.isLogining = true;
           await this.$store.dispatch("login", { account, password });
-          this.isLogining = false;
           this.$router.push(this.$route.query.redirect || { name: "Home" });
         } catch (error) {
-          // TODO 判斷是否為帳密輸入錯誤，是的話顯示錯誤
-          console.log(error);
+          // 應該判斷 error message，但 API 沒有回
+          this.loginError = "帳號或密碼錯誤，請重新輸入。";
+          console.log(error.response);
+        } finally {
+          this.isLogining = false;
         }
       }
     }
