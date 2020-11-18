@@ -21,14 +21,24 @@
       <v-row>
         <v-col cols="12">
           <v-tabs center-active show-arrows>
-            <v-tab :to="{ name: 'PatientProfile', params: $route.params }" exact>
+            <v-tab :to="{ name: 'PatientProfile', params: $route.params }" replace exact>
               病患首頁
             </v-tab>
-            <v-tab :to="{ name: 'PatientPhoto', params: $route.params }" exact>照片上傳</v-tab>
-            <v-tab :to="{ name: 'PatientVitalSign', params: $route.params }" exact>生命徵象</v-tab>
-            <v-tab :to="{ name: 'PatientLab', params: $route.params }" exact>檢驗報告</v-tab>
-            <v-tab :to="{ name: 'PatientImage', params: $route.params }" exact>影像調閱</v-tab>
-            <v-tab :to="{ name: 'PatientExam', params: $route.params }" exact>檢查報告</v-tab>
+            <v-tab :to="{ name: 'PatientPhoto', params: $route.params }" replace exact>
+              照片上傳
+            </v-tab>
+            <v-tab :to="{ name: 'PatientVitalSign', params: $route.params }" replace exact>
+              生命徵象
+            </v-tab>
+            <v-tab :to="{ name: 'PatientLab', params: $route.params }" replace exact>
+              檢驗報告
+            </v-tab>
+            <v-tab :to="{ name: 'PatientImage', params: $route.params }" replace exact>
+              影像調閱
+            </v-tab>
+            <v-tab :to="{ name: 'PatientExam', params: $route.params }" replace exact>
+              檢查報告
+            </v-tab>
             <v-tab :to="{ name: 'NotFound' }" exact>特殊檢查</v-tab>
             <v-tab :to="{ name: 'NotFound' }" exact>各類報告</v-tab>
             <v-tab :to="{ name: 'NotFound' }" exact>病理報告</v-tab>
@@ -50,7 +60,7 @@
 </template>
 
 <script>
-import PatientAppBar from "@/views/PatientAppBar.vue";
+import PatientAppBar from "@/views/Patient/PatientAppBar.vue";
 
 export default {
   name: "Patient",

@@ -1,8 +1,5 @@
 <template>
   <div>
-    <!-- TODO home app bar page title 切換 -->
-    <HomeAppBar color="primary" dark :title="pageTitle"   />
-
     <v-navigation-drawer :value="homeNavigationDrawer" @input="toggleHomeNavigationDrawer" fixed>
       <v-list nav expand>
         <v-list-item-group color="primary">
@@ -88,60 +85,17 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
-import HomeAppBar from "./HomeAppBar.vue";
-import axios from "@/plugins/axios";
+import { mapActions, mapState } from "vuex";
 
 export default {
   name: "HomeBaseLayout",
 
-  components: {
-    HomeAppBar
-  },
-
-  data() {
-    return {
-      stations: [],
-      sections: [],
-      searchCategories: [
-        { label: "科別碼", value: "SEC" },
-        { label: "病床號", value: "BED" },
-        { label: "病歷號", value: "MR" },
-        { label: "醫師碼", value: "DR" },
-        { label: "護理站代碼", value: "WARD" }
-      ]
-    };
-  },
-
   computed: {
-    ...mapState(["homeNavigationDrawer"]),
-    pageTitle() {
-      const { qryType, parameter } = this.$route.query;
-
-      if (!qryType && !parameter) {
-        return "我的關注病患";
-      }
-
-      const categoryText =
-        this.searchCategories.find(cateogry => cateogry.value === qryType)?.label || "";
-      return `${categoryText} ${parameter}`;
-    }
-  },
-
-  async created() {
-    const [stationList, sectionList] = await Promise.all([
-      this.getStationList(),
-      this.getSectionList()
-    ]);
-    this.stations = this.getStations(stationList);
-    this.sections = this.getSections(sectionList);
-  },
-
-  methods: {
-    getSections(sectionList) {
+    ...mapState(["homeNavigationDrawer", "stationList", "sectionList"]),
+    sections() {
       const sections = [];
 
-      for (const section of sectionList) {
+      for (const section of this.sectionList) {
         const mainClass = section.MainClass === "" ? "其他" : section.MainClass;
         if (!(mainClass in sections)) {
           sections[mainClass] = [section];
@@ -152,10 +106,10 @@ export default {
 
       return sections;
     },
-    getStations(stationList) {
+    stations() {
       const stations = [];
 
-      for (const station of stationList) {
+      for (const station of this.stationList) {
         const building = station.WBuilding === "" ? "其他" : station.WBuilding;
         if (!(building in stations)) {
           stations[building] = [station];
@@ -165,15 +119,15 @@ export default {
       }
 
       return stations;
-    },
-    async getSectionList() {
-      const { data: sectionList } = await axios.get("/api/SectionList");
-      return sectionList;
-    },
-    async getStationList() {
-      const { data: stationList } = await axios.get("/api/StationList");
-      return stationList;
-    },
+    }
+  },
+
+  async created() {
+    await Promise.all([this.fetchSectionList(), this.fetchStationList()]);
+  },
+
+  methods: {
+    ...mapActions(["fetchSectionList", "fetchStationList"]),
     toggleHomeNavigationDrawer(isOpen) {
       this.$store.commit("toggleHomeNavigationDrawer", isOpen);
     }

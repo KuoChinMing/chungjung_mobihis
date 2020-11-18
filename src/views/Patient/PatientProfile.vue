@@ -111,7 +111,6 @@ export default {
   async created() {
     const patientProfile = await this.getPatientProfile();
     this.danger = patientProfile.Danger;
-    console.log(this.danger);
   },
 
   computed: {

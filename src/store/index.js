@@ -8,11 +8,14 @@ Vue.use(Vuex);
 
 const token = localStorage.getItem("token") || null;
 const tokenPayload = token ? jwt_decode(token) : {};
+// console.log(tokenPayload);
 
 export default new Vuex.Store({
   state: {
     homeNavigationDrawer: false,
     token: token,
+    sectionList: [],
+    stationList: [],
     account: tokenPayload["unique_name"] || ""
   },
   mutations: {
@@ -24,11 +27,25 @@ export default new Vuex.Store({
       localStorage.setItem("token", token);
       axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     },
+    sectionList(state, sectionList) {
+      state.sectionList = sectionList;
+    },
+    stationList(state, stationList) {
+      state.stationList = stationList;
+    },
     toggleHomeNavigationDrawer(state, isOpen) {
       state.homeNavigationDrawer = isOpen;
     }
   },
   actions: {
+    async fetchSectionList({ commit }) {
+      const { data: sectionList } = await axios.get("/api/SectionList");
+      commit("sectionList", sectionList);
+    },
+    async fetchStationList({ commit }) {
+      const { data: stationList } = await axios.get("/api/StationList");
+      commit("stationList", stationList);
+    },
     async login({ commit }, { account, password }) {
       const loginParams = { userID: account, password };
       const loginResponse = await axios.get("/api/Token/Login", { params: loginParams });

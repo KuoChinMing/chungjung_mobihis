@@ -28,63 +28,63 @@ const routes = [
     children: [
       {
         path: "/",
-        component: load("HomeBaseLayout"),
+        component: () => import(`@/views/Home/HomeBaseLayout.vue`),
         children: [
           {
             path: "",
             name: "Home",
-            component: load("Home")
+            component: () => import(`@/views/Home/Home.vue`)
           },
           {
             path: "/discharged",
             name: "Discharged",
-            component: load("Discharged")
+            component: () => import(`@/views/Home/Discharged.vue`)
           },
           {
             path: "/station/:station",
             name: "Station",
-            component: load("Home")
+            component: () => import(`@/views/Home/Station.vue`)
           },
           {
             path: "/section/:section",
             name: "Section",
-            component: load("Home")
+            component: () => import(`@/views/Home/Section.vue`)
           }
         ]
       },
       {
         path: "/patient/:patientId/:admissionKey/:inHosDate",
-        component: load("Patient"),
+        component: () => import(`@/views/Patient/Patient.vue`),
         children: [
           {
             path: "",
             name: "PatientProfile",
-            component: load("PatientProfile")
+            component: () => import(`@/views/Patient/PatientProfile.vue`)
           },
           {
             path: "vitalSign",
             name: "PatientVitalSign",
-            component: load("PatientVitalSign")
+            component: () => import(`@/views/Patient/PatientVitalSign.vue`)
           },
           {
             path: "lab",
             name: "PatientLab",
-            component: load("PatientLab")
+            component: () => import(`@/views/Patient/PatientLab.vue`)
           },
           {
             path: "image",
             name: "PatientImage",
-            component: load("PatientImage")
+            component: () => import(`@/views/Patient/PatientImage.vue`)
           },
           {
             path: "exam",
             name: "PatientExam",
-            component: load("PatientExam")
+            component: () => import(`@/views/Patient/PatientExam.vue`)
           },
           {
             path: "photo",
             name: "PatientPhoto",
-            component: load("PatientPhoto")
+            component: () => import(`@/views/Patient/PatientPhoto.vue`)
           }
         ]
       },
@@ -103,9 +103,12 @@ const routes = [
   }
 ];
 
-const scrollBehavior = function() {
-  // to, from, savedPosition
-  return { x: 0, y: 0 };
+const scrollBehavior = function(to, from, position) {
+  if (position) {
+    return position;
+  } else {
+    return { x: 0, y: 0 };
+  }
 };
 
 const router = new VueRouter({
