@@ -13,7 +13,7 @@
       </v-col>
     </v-row>
 
-    <v-dialog v-model="isUploadPhotoDialogOpen">
+    <v-dialog v-model="isUploadPhotoDialogOpen" max-width="360">
       <v-card>
         <v-toolbar flat dense>
           <v-toolbar-title>照片上傳</v-toolbar-title>

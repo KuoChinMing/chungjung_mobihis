@@ -3,7 +3,9 @@
     <v-app-bar-nav-icon @click="toggleHomeNavigationDrawer"></v-app-bar-nav-icon>
 
     <!-- <v-expand-x-transition> -->
-    <v-toolbar-title v-show="!isCategorySearchShowing">{{ title }}</v-toolbar-title>
+    <v-toolbar-title v-show="!isCategorySearchShowing">
+      {{ title }}
+    </v-toolbar-title>
     <!-- </v-expand-x-transition> -->
 
     <v-spacer></v-spacer>
@@ -64,6 +66,10 @@ export default {
     }
   },
 
+  updated() {
+    console.log("hello");
+  },
+
   methods: {
     toggleHomeNavigationDrawer() {
       this.$store.commit("toggleHomeNavigationDrawer", true);
@@ -73,7 +79,10 @@ export default {
     },
     async search() {
       this.isCategorySearchShowing = false;
+      const { qryType, parameter } = this.$route.query;
+
       if (!this.searchKeyword || !this.searchKeyword.trim()) return;
+      if (qryType === this.searchSelectedCategory.value && parameter === this.searchKeyword) return;
 
       this.$router.push({
         name: "Home",

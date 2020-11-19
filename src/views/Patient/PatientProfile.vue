@@ -49,13 +49,16 @@
                 <div class="text-subtitle-1 font-weight-bold">
                   病安提示訊息-臨床警訊(CAS)
                 </div>
-                <div
-                  class="text-body-2"
-                  v-for="item in danger.CAS_EvaluationItem.split('\r\n')"
-                  :key="item"
-                >
-                  {{ item }}
-                </div>
+                <span v-if="danger.CAS_EvaluationItem">
+                  <div
+                    class="text-body-2"
+                    v-for="item in danger.CAS_EvaluationItem.split('\r\n')"
+                    :key="item"
+                  >
+                    {{ item }}
+                  </div>
+                </span>
+                <span v-else>--</span>
               </v-col>
               <v-col cols="12" sm="6">
                 <div class="text-subtitle-1 font-weight-bold">

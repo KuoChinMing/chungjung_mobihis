@@ -15,7 +15,6 @@
               <span class="ml-2  text-body-1">病床號: {{ patientInfo.BedNo || "--" }}</span>
             </div>
             <div>
-              <!-- TODO 入院日 出院日與 danger 對不起來 -->
               <span class="text-body-1">入院日: {{ RocToBc(patientInfo.InHosDate) }} </span>
               <span class="ml-2 text-body-1">出院日: {{ RocToBc(patientInfo.OutDate) }}</span>
             </div>
