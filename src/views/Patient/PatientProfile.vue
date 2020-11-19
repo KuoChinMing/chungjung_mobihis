@@ -2,8 +2,8 @@
   <v-container fluid>
     <v-row>
       <v-col cols="12">
-        <v-card v-if="danger">
-          <v-container fluid>
+        <v-card v-if="!isDangerLoading">
+          <v-container fluid v-if="danger">
             <v-row>
               <v-col cols="12">
                 <div class="text-subtitle-1 font-weight-bold">問題列表</div>
@@ -104,31 +104,37 @@ export default {
 
   data() {
     return {
-      danger: null
+      danger: null,
+      isDangerLoading: false
     };
   },
 
-  async created() {
-    const patientProfile = await this.getPatientProfile();
-    this.danger = patientProfile.Danger;
+  computed: {
+    ...mapState(["account", "patientInfo"])
   },
 
-  computed: {
-    ...mapState(["account", "hosDate"])
+  watch: {
+    async patientInfo() {
+      try {
+        this.isDangerLoading = true;
+        const patientProfile = await this.getPatientProfile();
+        this.danger = patientProfile.Danger;
+      } catch (error) {
+        console.log(error);
+      } finally {
+        this.isDangerLoading = false;
+      }
+    }
   },
 
   methods: {
     async getPatientProfile() {
-      const { patientId, admissionKey, inHosDate } = this.$route.params;
       // const params = { requestID: this.account, chtno: patientId, admissionKey };
       // const res = await axios.get("/api/PatientDanger", { params });
-      const params = {
-        requestID: this.account,
-        chtno: patientId,
-        admission: admissionKey,
-        hosDate: inHosDate
-      };
+      const { CHTNO: chtno, AdmissionKey: admission, InHosDate: hosDate } = this.patientInfo;
+      const params = { requestID: this.account, chtno, admission, hosDate };
       const { data: patientProfile } = await axios.get("/api/PatientSummary", { params });
+
       return patientProfile;
     }
   }

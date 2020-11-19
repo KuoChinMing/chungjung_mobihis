@@ -2,7 +2,7 @@
   <div>
     <SettingsAppBar color="primary" dark title="設定" />
 
-    <v-container>
+    <v-container fluid>
       <v-row>
         <v-col cols="12">
           <v-card>

@@ -52,6 +52,9 @@ export default {
   watch: {
     $route: {
       async handler(to) {
+        // 防止切到 patientProfile 頁面時觸發
+        if (to.name !== "Section") return;
+
         this.patientList = await this.getPatientList("SEC", to.params.section);
       },
       immediate: true

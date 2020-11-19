@@ -16,6 +16,7 @@ export default new Vuex.Store({
     token: token,
     sectionList: [],
     stationList: [],
+    patientInfo: null,
     account: tokenPayload["unique_name"] || ""
   },
   mutations: {
@@ -33,6 +34,9 @@ export default new Vuex.Store({
     stationList(state, stationList) {
       state.stationList = stationList;
     },
+    patientInfo(state, patientInfo) {
+      state.patientInfo = patientInfo;
+    },
     toggleHomeNavigationDrawer(state, isOpen) {
       state.homeNavigationDrawer = isOpen;
     }
@@ -45,6 +49,10 @@ export default new Vuex.Store({
     async fetchStationList({ commit }) {
       const { data: stationList } = await axios.get("/api/StationList");
       commit("stationList", stationList);
+    },
+    async fetchPatientInfo({ commit }, params) {
+      const { data: patientInfo } = await axios.get("/api/PatientInfo", { params });
+      commit("patientInfo", patientInfo);
     },
     async login({ commit }, { account, password }) {
       const loginParams = { userID: account, password };

@@ -1,6 +1,11 @@
 <template>
   <div>
-    <v-navigation-drawer :value="homeNavigationDrawer" @input="toggleHomeNavigationDrawer" fixed>
+    <v-navigation-drawer
+      :value="homeNavigationDrawer"
+      @input="toggleHomeNavigationDrawer"
+      fixed
+      temporary
+    >
       <v-list nav expand>
         <v-list-item-group color="primary">
           <v-list-item :to="{ name: 'Home' }" exact>

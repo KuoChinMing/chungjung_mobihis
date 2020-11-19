@@ -42,6 +42,7 @@
 <script>
 import { mapState } from "vuex";
 import PatientList from "@/views/Home/PatientList.vue";
+import { formatDate } from "@/utils/utils.js";
 import axios from "@/plugins/axios.js";
 
 export default {
@@ -62,14 +63,8 @@ export default {
 
   computed: {
     ...mapState(["account"]),
-    // TODO locale 抽成全域
     dateRangeText() {
-      let startDate = this.dateRange[0];
-      let endDate = this.dateRange[1];
-      const formatDate = date => {
-        const dateFormat = { year: "numeric", month: "long", day: "numeric" };
-        return new Date(date).toLocaleString("zh-TW", dateFormat);
-      };
+      const [startDate, endDate] = this.dateRange;
 
       if (startDate && endDate) return `${formatDate(startDate)} - ${formatDate(endDate)}`;
       else if (startDate) return formatDate(startDate);

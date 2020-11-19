@@ -36,24 +36,24 @@ const routes = [
             component: () => import(`@/views/Home/Home.vue`)
           },
           {
-            path: "/discharged",
+            path: "discharged",
             name: "Discharged",
             component: () => import(`@/views/Home/Discharged.vue`)
           },
           {
-            path: "/station/:station",
+            path: "station/:station",
             name: "Station",
             component: () => import(`@/views/Home/Station.vue`)
           },
           {
-            path: "/section/:section",
+            path: "section/:section",
             name: "Section",
             component: () => import(`@/views/Home/Section.vue`)
           }
         ]
       },
       {
-        path: "/patient/:patientId/:admissionKey/:inHosDate",
+        path: "/admission/:admissionKey",
         component: () => import(`@/views/Patient/Patient.vue`),
         children: [
           {
@@ -104,6 +104,7 @@ const routes = [
 ];
 
 const scrollBehavior = function(to, from, position) {
+  // 搭配 keep-alive 讓使用者回 home 的頁面時，回到上次的視窗位子 (scroll position)
   if (position) {
     return position;
   } else {

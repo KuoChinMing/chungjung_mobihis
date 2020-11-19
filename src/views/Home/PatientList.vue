@@ -15,11 +15,7 @@
             @click="
               $router.push({
                 name: 'PatientProfile',
-                params: {
-                  patientId: patient.CHTNO,
-                  admissionKey: patient.AdmissionKey,
-                  inHosDate: patient.InHosDate
-                }
+                params: { admissionKey: patient.AdmissionKey }
               })
             "
           >
@@ -132,7 +128,7 @@
       </v-container>
     </div>
     <div v-else>
-      <v-container>
+      <v-container fluid>
         <v-row no-gutters>
           <v-col cols="12">
             <v-alert colored-border elevation="2" border="bottom" color="primary">
@@ -146,6 +142,8 @@
 </template>
 
 <script>
+import utils from "@/utils/utils.js";
+
 export default {
   name: "PatientList",
 
@@ -154,7 +152,7 @@ export default {
     patientList: {
       type: Array,
       default: () => [],
-      require: false
+      required: false
     }
   },
 
@@ -198,16 +196,8 @@ export default {
   },
 
   methods: {
-    fullAge(age) {
-      return `${+age.slice(0, 3)}Y${age.slice(3, 5)}M`;
-    },
-    RocToBc(time) {
-      const year = +time.slice(0, 3) + 1911;
-      const month = time.slice(3, 5);
-      const date = time.slice(5, 7);
-
-      return `${year}/${month}/${date}`;
-    }
+    fullAge: utils.fullAge,
+    RocToBc: utils.RocToBc
   }
 };
 </script>

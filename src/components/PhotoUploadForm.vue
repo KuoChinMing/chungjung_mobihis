@@ -1,15 +1,29 @@
 <template>
   <v-form name="photoUploadForm" ref="photoUploadForm" @submit.prevent="submit">
     <v-container>
-      <!-- TODO 照片上傳自動帶入病人資訊 -->
       <v-row>
         <v-col cols="12">
-          <v-text-field name="mrno" outlined dense hide-details label="病歷號"></v-text-field>
+          <v-text-field
+            v-model="chtno"
+            name="mrno"
+            outlined
+            dense
+            hide-details
+            label="病歷號"
+          ></v-text-field>
         </v-col>
         <v-col cols="12">
-          <v-text-field name="patientName" outlined dense hide-details label="姓名"></v-text-field>
+          <v-text-field
+            v-model="name"
+            name="patientName"
+            outlined
+            dense
+            hide-details
+            label="姓名"
+          ></v-text-field>
         </v-col>
         <v-col cols="12">
+          <!-- TODO 自動帶入登入者的科別 -->
           <v-text-field name="section" outlined dense hide-details label="科別"></v-text-field>
         </v-col>
         <v-col cols="12">
@@ -67,6 +81,19 @@
 <script>
 export default {
   name: "PhotoUploadForm",
+
+  props: {
+    chtno: {
+      type: String,
+      default: () => "",
+      required: false
+    },
+    name: {
+      type: String,
+      default: () => "",
+      required: false
+    }
+  },
 
   data() {
     return {

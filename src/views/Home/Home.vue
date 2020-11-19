@@ -5,7 +5,7 @@
     <v-container fluid>
       <v-row>
         <v-col cols="12" v-if="!isPatientListLoading">
-          <PatientList :patientList="patientList" :key="todo" />
+          <PatientList :patientList="patientList" />
         </v-col>
 
         <v-col cols="12" v-else>
@@ -34,8 +34,6 @@ export default {
 
   data() {
     return {
-      // TODO: fource patientList component update
-      todo: 0,
       isPatientListLoading: false,
       patientList: null
     };
@@ -66,9 +64,10 @@ export default {
   watch: {
     $route: {
       async handler(to, from) {
-        this.todo++;
+        // 防止切到 patientProfile 頁面時觸發
+        if (to.name !== "Home") return;
         // 從病患頁過來不撈取新資料 (搭配 keep-alive cache patientList)
-        if (from?.name === "PatientProfile") return;
+        if (from?.name === "PatientProfile" && !!this.patientList) return;
 
         const { qryType, parameter } = to.query;
         if (qryType || parameter) {

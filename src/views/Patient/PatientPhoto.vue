@@ -3,8 +3,7 @@
     <v-row>
       <v-col cols="12">
         <v-card>
-          <v-card-title>照片上傳</v-card-title>
-          <v-card-text>
+          <v-card-text class="text-center">
             <v-btn color="primary" depressed @click="openUploadPhotoDialog">
               <v-icon>mdi-cloud-upload</v-icon>
               <span class="ml-2">照片上傳</span>
@@ -16,14 +15,18 @@
 
     <v-dialog v-model="isUploadPhotoDialogOpen">
       <v-card>
-        <v-toolbar flat>
+        <v-toolbar flat dense>
           <v-toolbar-title>照片上傳</v-toolbar-title>
           <v-spacer></v-spacer>
           <v-icon class="ml-auto" @click="closeUploadPhotoDialog">mdi-close</v-icon>
         </v-toolbar>
         <v-divider></v-divider>
         <v-card-text>
-          <PhotoUploadForm @submit="uploadPhoto" />
+          <PhotoUploadForm
+            @submit="uploadPhoto"
+            :chtno="patientInfo.CHTNO"
+            :name="patientInfo.CNM"
+          />
         </v-card-text>
       </v-card>
     </v-dialog>
@@ -49,7 +52,7 @@ export default {
   },
 
   computed: {
-    ...mapState(["token"])
+    ...mapState(["token", "patientInfo"])
   },
 
   methods: {

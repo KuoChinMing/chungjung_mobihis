@@ -4,17 +4,26 @@
 
     <v-container fluid class="fill-height">
       <v-row>
-        <v-col cols="12">
-          <div class="pl-3">
-            <h2 class="d-inline-block">山下智久</h2>
-            <span class="ml-2 text-body-1"> 男 (74Y11M)</span>
+        <v-col cols="12" v-if="!isPatientInfoLoading">
+          <div class="pl-3" v-if="patientInfo">
+            <h2 class="d-inline-block">{{ patientInfo.CNM || "--" }}</h2>
+            <span class="ml-2 text-body-1">
+              {{ gender(patientInfo.Gender) }} ({{ fullAge(patientInfo.Age) }})
+            </span>
             <div>
-              <span class="text-body-1">病床號: 1234</span>
-              <span class="ml-2 text-body-1">病歷號: {{ $route.params.patientId }}</span>
+              <span class="text-body-1">病歷號: {{ patientInfo.CHTNO || "--" }}</span>
+              <span class="ml-2  text-body-1">病床號: {{ patientInfo.BedNo || "--" }}</span>
             </div>
             <div>
-              <span>TODO: 上面的是假資料</span>
+              <!-- TODO 入院日 出院日與 danger 對不起來 -->
+              <span class="text-body-1">入院日: {{ RocToBc(patientInfo.InHosDate) }} </span>
+              <span class="ml-2 text-body-1">出院日: {{ RocToBc(patientInfo.OutDate) }}</span>
             </div>
+          </div>
+        </v-col>
+        <v-col cols="12" v-else>
+          <div class="text-center">
+            <v-progress-circular indeterminate color="primary"></v-progress-circular>
           </div>
         </v-col>
       </v-row>
@@ -61,12 +70,48 @@
 
 <script>
 import PatientAppBar from "@/views/Patient/PatientAppBar.vue";
+import utils from "@/utils/utils.js";
+import { mapState } from "vuex";
 
 export default {
   name: "Patient",
 
   components: {
     PatientAppBar
+  },
+
+  computed: {
+    ...mapState({ newPatientInfo: "patientInfo" })
+  },
+
+  data() {
+    return {
+      patientInfo: null,
+      isPatientInfoLoading: false
+    };
+  },
+
+  async created() {
+    await this.setPatientInfo();
+  },
+
+  methods: {
+    async setPatientInfo() {
+      try {
+        const admissionKey = this.$route.params.admissionKey;
+        const params = { admissionKey };
+        this.isPatientInfoLoading = true;
+        await this.$store.dispatch("fetchPatientInfo", params);
+        this.patientInfo = this.newPatientInfo;
+      } catch (error) {
+        console.log(error);
+      } finally {
+        this.isPatientInfoLoading = false;
+      }
+    },
+    gender: utils.gender,
+    fullAge: utils.fullAge,
+    RocToBc: utils.RocToBc
   }
 };
 </script>
