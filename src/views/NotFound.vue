@@ -5,9 +5,9 @@
         <v-row>
           <v-col class="text-center ">
             <h4 class="text-h4 primary--text">Whoops, 404</h4>
-            <p>您找尋的網頁不存在</p>
+            <p>{{ $t("pageNotFound") }}</p>
             <v-btn color="primary" outlined @click="$router.push({ name: 'Home' })">
-              帶我離開這裡
+              {{ $t("bringMeHome") }}
             </v-btn>
           </v-col>
         </v-row>

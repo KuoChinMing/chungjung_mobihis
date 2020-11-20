@@ -1,9 +1,95 @@
 {
-  "i18n": "hi i18n !!",
+  "i18n": "hello i18n !!",
 
   "language": {
     "language": "language",
     "en": "English",
     "zh": "繁體中文"
-  }
+  },
+
+  "login": {
+    "account": "account",
+    "password": "password",
+    "login": "login",
+    "logout": "logout",
+    "register": "register"
+  },
+
+  "patient": {
+    "chtno": "chtno",
+    "name": "name"
+  },
+
+  "label": {
+    "drug": "drug",
+    "allergy": "allergy",
+    "note": "note",
+    "danger": "danger",
+    "remind": "remind",
+    "critical": "C",
+    "dnr": "D"
+  },
+
+  "rules": {
+    "required": "required"
+  },
+
+  "patientProfile": {
+    "patientProfile": "patient profile",
+    "issueList": "issues",
+    "mainDiagnosis": "main diagnosis",
+    "subDiagnosis": "sub diagnosis",
+    "bodyHeight": "height",
+    "bodyWeight": "weight",
+    "danger": "danger",
+    "remind": "remind",
+    "cas": "CAS",
+    "drugAlert": "drug alert",
+    "specialNote": "special note",
+    "allergyHistory": "allergy history",
+    "icCard": "IC card",
+    "dnr": "DNR",
+    "catastrophicIllness": "catastrophic illness",
+    "patientSafetyNotification": "patient-safety notification",
+    "notification": "notification"
+  },
+
+  "systemTitle": "LiveAid System",
+  "section": "section",
+  "timeSection": "time",
+  "imageType": "image type",
+  "bodyPart": "body part",
+  "image": "image",
+  "upload": "upload",
+  "dischargedPatient": "discharged patient",
+  "buildings": "buildings",
+  "station": "station",
+  "myPatient": "my patient",
+  "sectionNumber": "section No.",
+  "bedNumber": "bed No.",
+  "doctorNumber": "doctor No.",
+  "stationNumber": "station No.",
+  "others": "others",
+  "noPatient": "no patient",
+  "admittedDay": "admitted day",
+  "dischargedDay": "discharged day",
+  "medicalRecords": "medical records",
+  "uploadPhoto": "upload photo",
+  "credentialInvalid": "login error",
+  "bringMeHome": "bring me home",
+  "pageNotFound": "page not found",
+  "settings": "settings",
+  "userProfile": "user profile",
+  "userName": "name",
+  "userPosition": "position",
+  "systemSettings": "system settings",
+  "portSettings": "port settings",
+  "ipSettings": "IP settings",
+  "aetSettings": "AET settings",
+  "useUde": "use UDE",
+  "udeSettings": "UDE settings",
+  "idoServerName": "iDO Server Name",
+  "museIpSettings": "Muse IP settings",
+  "useRocYear": "use ROC Year",
+  "dischargedQueryPeriod": "discharged query period"
 }

@@ -1,5 +1,5 @@
 <template>
-  <v-btn color="primary" @click="logout">登出</v-btn>
+  <v-btn color="primary" @click="logout">{{ $t("login.login") }}</v-btn>
 </template>
 
 <script>

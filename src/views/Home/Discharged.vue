@@ -2,7 +2,7 @@
   <div>
     <v-app-bar color="primary" dark>
       <v-app-bar-nav-icon @click="toggleHomeNavigationDrawer"></v-app-bar-nav-icon>
-      <v-toolbar-title>出院病患</v-toolbar-title>
+      <v-toolbar-title>{{ $t("dischargedPatient") }}</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn icon :to="{ name: 'Settings' }">
         <v-icon>mdi-settings</v-icon>

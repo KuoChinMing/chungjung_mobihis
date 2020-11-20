@@ -4,7 +4,7 @@
       <v-btn icon @click="routerBack">
         <v-icon>mdi-chevron-left</v-icon>
       </v-btn>
-      <v-toolbar-title>設定</v-toolbar-title>
+      <v-toolbar-title>{{ $t("settings") }}</v-toolbar-title>
     </v-app-bar>
 
     <v-container fluid>
@@ -15,12 +15,12 @@
               <v-list-group prepend-icon="mdi-account">
                 <template v-slot:activator>
                   <v-list-item-content>
-                    <v-list-item-title>基本資料</v-list-item-title>
+                    <v-list-item-title>{{ $t("userProfile") }}</v-list-item-title>
                   </v-list-item-content>
                 </template>
                 <v-list-item>
                   <v-list-item-content>
-                    <v-list-item-title>使用者</v-list-item-title>
+                    <v-list-item-title>{{ $t("userName") }}</v-list-item-title>
                   </v-list-item-content>
                   <v-list-item-action>
                     <v-list-item-title>{{ account }}</v-list-item-title>
@@ -28,7 +28,7 @@
                 </v-list-item>
                 <v-list-item>
                   <v-list-item-content>
-                    <v-list-item-title>職稱</v-list-item-title>
+                    <v-list-item-title>{{ $t("userPosition") }}</v-list-item-title>
                   </v-list-item-content>
                   <v-list-item-action>
                     <v-list-item-title>TODO</v-list-item-title>
@@ -39,7 +39,7 @@
               <v-list-group prepend-icon="mdi-settings">
                 <template v-slot:activator>
                   <v-list-item-content>
-                    <v-list-item-title>系統設定</v-list-item-title>
+                    <v-list-item-title>{{ $t("systemSettings") }}</v-list-item-title>
                   </v-list-item-content>
                 </template>
                 <v-list-item>
@@ -75,7 +75,7 @@
                 </v-list-item>
                 <v-list-item>
                   <v-list-item-content>
-                    <v-list-item-title>使用明國年顯示</v-list-item-title>
+                    <v-list-item-title>{{ $t("useRocYear") }}</v-list-item-title>
                   </v-list-item-content>
                   <v-list-item-action>
                     <v-switch></v-switch>
@@ -83,7 +83,7 @@
                 </v-list-item>
                 <v-list-item>
                   <v-list-item-content>
-                    <v-list-item-title>出院查詢區間</v-list-item-title>
+                    <v-list-item-title>{{ $t("dischargedQueryPeriod") }}</v-list-item-title>
                   </v-list-item-content>
                   <v-list-item-action>
                     <v-menu offset-y>
@@ -111,7 +111,7 @@
                 </v-list-item>
                 <v-list-item>
                   <v-list-item-content>
-                    <v-list-item-title>IP 設定</v-list-item-title>
+                    <v-list-item-title>{{ $t("ipSettings") }}</v-list-item-title>
                   </v-list-item-content>
                   <v-list-item-action>
                     <v-text-field dense hide-details></v-text-field>
@@ -119,7 +119,7 @@
                 </v-list-item>
                 <v-list-item>
                   <v-list-item-content>
-                    <v-list-item-title>Muse IP 設定</v-list-item-title>
+                    <v-list-item-title>{{ $t("museIpSettings") }}</v-list-item-title>
                   </v-list-item-content>
                   <v-list-item-action>
                     <v-text-field dense hide-details></v-text-field>
@@ -127,7 +127,7 @@
                 </v-list-item>
                 <v-list-item>
                   <v-list-item-content>
-                    <v-list-item-title>iDO Server Name</v-list-item-title>
+                    <v-list-item-title>{{ $t("idoServerName") }}</v-list-item-title>
                   </v-list-item-content>
                   <v-list-item-action>
                     <v-text-field dense hide-details></v-text-field>
@@ -138,12 +138,12 @@
               <v-list-group prepend-icon="mdi-clipboard-pulse">
                 <template v-slot:activator>
                   <v-list-item-content>
-                    <v-list-item-title>UDE 設定</v-list-item-title>
+                    <v-list-item-title>{{ $t("udeSettings") }}</v-list-item-title>
                   </v-list-item-content>
                 </template>
                 <v-list-item>
                   <v-list-item-content>
-                    <v-list-item-title>使用 UDE</v-list-item-title>
+                    <v-list-item-title>{{ $t("useUde") }}</v-list-item-title>
                   </v-list-item-content>
                   <v-list-item-action>
                     <v-switch></v-switch>
@@ -151,7 +151,7 @@
                 </v-list-item>
                 <v-list-item>
                   <v-list-item-content>
-                    <v-list-item-title>AET 設定</v-list-item-title>
+                    <v-list-item-title>{{ $t("aetSettings") }}</v-list-item-title>
                   </v-list-item-content>
                   <v-list-item-action>
                     <v-text-field dense hide-details></v-text-field>
@@ -159,7 +159,7 @@
                 </v-list-item>
                 <v-list-item>
                   <v-list-item-content>
-                    <v-list-item-title>IP 設定</v-list-item-title>
+                    <v-list-item-title>{{ $t("ipSettings") }}</v-list-item-title>
                   </v-list-item-content>
                   <v-list-item-action>
                     <v-text-field dense hide-details></v-text-field>
@@ -167,7 +167,7 @@
                 </v-list-item>
                 <v-list-item>
                   <v-list-item-content>
-                    <v-list-item-title>Port 設定</v-list-item-title>
+                    <v-list-item-title>{{ $t("portSettings") }}</v-list-item-title>
                   </v-list-item-content>
                   <v-list-item-action>
                     <v-text-field dense hide-details></v-text-field>
@@ -180,7 +180,7 @@
                   <v-icon>mdi-account-arrow-right</v-icon>
                 </v-list-item-icon>
                 <v-list-item-content>
-                  <v-list-item-title>登出</v-list-item-title>
+                  <v-list-item-title>{{ $t("login.logout") }}</v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
             </v-list>
@@ -202,18 +202,7 @@ export default {
     return {
       prevRoute: null,
       selectedPeriod: "todo",
-      periods: [
-        "一週",
-        "兩週",
-        "一個月",
-        "兩個月",
-        "三個月",
-        "四個月",
-        "五個月",
-        "六個月",
-        "一年",
-        "兩年"
-      ]
+      periods: ["TODO1", "TODO2", "TODO3", "TODO4", "TODO5"]
     };
   },
 

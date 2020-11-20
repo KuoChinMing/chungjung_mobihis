@@ -39,7 +39,7 @@
                           small
                           dark
                           color="pink "
-                          >D</v-chip
+                          >{{ $t("label.dnr") }}</v-chip
                         >
                         <v-chip
                           v-if="patient.CriticalFlag == 1"
@@ -48,7 +48,7 @@
                           small
                           dark
                           color="deep-orange"
-                          >C</v-chip
+                          >{{ $t("label.critical") }}</v-chip
                         >
                         <v-chip
                           v-if="patient.DrugTag == 'True'"
@@ -57,8 +57,9 @@
                           small
                           dark
                           color="green"
-                          >藥</v-chip
                         >
+                          {{ $t("label.drug") }}
+                        </v-chip>
                         <v-chip
                           v-if="patient.AllergyFlag == 1"
                           class="ml-1 px-2"
@@ -66,7 +67,7 @@
                           small
                           dark
                           color="purple "
-                          >敏</v-chip
+                          >{{ $t("label.allergy") }}</v-chip
                         >
                         <v-chip
                           v-if="patient.ICCardNote == 1"
@@ -75,7 +76,7 @@
                           small
                           dark
                           color="light-blue "
-                          >註</v-chip
+                          >{{ $t("label.note") }}</v-chip
                         >
                         <v-chip
                           v-if="patient.DangerFlag == 1"
@@ -84,7 +85,7 @@
                           small
                           dark
                           color="red "
-                          >危</v-chip
+                          >{{ $t("label.danger") }}</v-chip
                         >
                         <v-chip
                           v-if="patient.RemindFlag == 1"
@@ -93,7 +94,7 @@
                           small
                           dark
                           color="orange "
-                          >警</v-chip
+                          >{{ $t("label.remind") }}</v-chip
                         >
                       </v-col>
                     </v-row>
@@ -132,7 +133,7 @@
         <v-row no-gutters>
           <v-col cols="12">
             <v-alert colored-border elevation="2" border="bottom" color="primary">
-              查無病患資料
+              {{ $t("noPatient") }}
             </v-alert>
           </v-col>
         </v-row>
@@ -173,7 +174,7 @@ export default {
     patientListByDoctor() {
       const doctor = this.doctorTabs[this.doctorTab];
 
-      if (doctor === "全部") {
+      if (doctor === this.$t("others")) {
         return this.innerPatientList;
       }
       return this.innerPatientList.filter(patient => patient.VSName === doctor);
@@ -182,7 +183,7 @@ export default {
       const doctorTabs = [];
 
       if (this.innerPatientList.length > 0) {
-        doctorTabs.push("全部");
+        doctorTabs.push(this.$t("others"));
       }
       // VSName 是主治醫師名字, 用醫生名稱判斷尚有重複的問題
       for (const patient of this.innerPatientList) {

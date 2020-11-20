@@ -13,7 +13,7 @@
               <v-icon>mdi-star</v-icon>
             </v-list-item-icon>
             <v-list-item-content>
-              <v-list-item-title>我的關注病患</v-list-item-title>
+              <v-list-item-title>{{ $t("myPatient") }}</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
 
@@ -22,16 +22,14 @@
               <v-icon>mdi-account-arrow-right</v-icon>
             </v-list-item-icon>
             <v-list-item-content>
-              <v-list-item-title>出院病患</v-list-item-title>
+              <v-list-item-title>{{ $t("dischargedPatient") }}</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
 
           <v-list-group prepend-icon="mdi-hospital">
             <template v-slot:activator>
               <v-list-item-content>
-                <v-list-item-title>
-                  大樓 / 護理站
-                </v-list-item-title>
+                <v-list-item-title> {{ $t("buildings") }} / {{ $t("station") }} </v-list-item-title>
               </v-list-item-content>
             </template>
 
@@ -58,7 +56,7 @@
           <v-list-group prepend-icon="mdi-human-male-girl">
             <template v-slot:activator>
               <v-list-item-content>
-                <v-list-item-title>科別</v-list-item-title>
+                <v-list-item-title>{{ $t("section") }}</v-list-item-title>
               </v-list-item-content>
             </template>
 
@@ -101,7 +99,7 @@ export default {
       const sections = [];
 
       for (const section of this.sectionList) {
-        const mainClass = section.MainClass === "" ? "其他" : section.MainClass;
+        const mainClass = section.MainClass === "" ? this.$t("others") : section.MainClass;
         if (!(mainClass in sections)) {
           sections[mainClass] = [section];
         } else {
@@ -115,7 +113,7 @@ export default {
       const stations = [];
 
       for (const station of this.stationList) {
-        const building = station.WBuilding === "" ? "其他" : station.WBuilding;
+        const building = station.WBuilding === "" ? this.$t("others") : station.WBuilding;
         if (!(building in stations)) {
           stations[building] = [station];
         } else {

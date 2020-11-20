@@ -8,7 +8,7 @@
               <v-card-title class="justify-center flex-column">
                 <img src="@/assets/logo.png" alt="Logo" width="80%" />
                 <h1 class="text-subtitle-1 text-center" style="word-break: break-word;">
-                  LiveAid System
+                  {{ $t("systemTitle") }}
                 </h1>
               </v-card-title>
               <v-card-text class="pb-0">
@@ -21,7 +21,7 @@
                 >
                   <v-text-field
                     v-model="account"
-                    :label="'帳號'"
+                    :label="$t('login.account')"
                     :rules="[requiredRule]"
                     :error-messages="loginError"
                     @input="loginError = ''"
@@ -34,7 +34,7 @@
 
                   <v-text-field
                     v-model="password"
-                    label="密碼"
+                    :label="$t('login.password')"
                     :rules="[requiredRule]"
                     :error-messages="loginError"
                     @input="loginError = ''"
@@ -47,10 +47,10 @@
                 </v-form>
               </v-card-text>
               <v-card-actions>
-                <v-btn text color="primary">註冊</v-btn>
+                <v-btn text color="primary">{{ $t("login.register") }}</v-btn>
                 <v-spacer></v-spacer>
                 <v-btn depressed color="primary" :loading="isLogining" type="submit" form="login">
-                  登入
+                  {{ $t("login.login") }}
                 </v-btn>
               </v-card-actions>
             </v-card>
@@ -77,7 +77,7 @@ export default {
 
   methods: {
     requiredRule(value) {
-      return !!value || "此欄位為必填項目";
+      return !!value || this.$t("rules.required");
     },
     async login() {
       if (this.$refs.form.validate()) {
@@ -88,7 +88,7 @@ export default {
           this.$router.push(this.$route.query.redirect || { name: "Home" });
         } catch (error) {
           // 應該判斷 error message，但 API 沒有回
-          this.loginError = "帳號或密碼錯誤，請重新輸入。";
+          this.loginError = this.$t("credentialInvalid");
           console.log(error.response);
         } finally {
           this.isLogining = false;

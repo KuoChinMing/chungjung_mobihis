@@ -45,15 +45,16 @@ export default {
       const { qryType, parameter } = this.$route.query;
 
       if (!qryType && !parameter) {
-        return "我的關注病患";
+        return this.$t("myPatient");
       }
 
+      // TODO: searchCategories 抽成全域
       const searchCategories = [
-        { label: "科別碼", value: "SEC" },
-        { label: "病床號", value: "BED" },
-        { label: "病歷號", value: "MR" },
-        { label: "醫師碼", value: "DR" },
-        { label: "護理站代碼", value: "WARD" }
+        { label: this.$t("sectionNumber"), value: "SEC" },
+        { label: this.$t("bedNumber"), value: "BED" },
+        { label: this.$t("patient.chtno"), value: "MR" },
+        { label: this.$t("doctorNumber"), value: "DR" },
+        { label: this.$t("stationNumber"), value: "WARD" }
       ];
       const category = searchCategories.find(cateogry => cateogry.value === qryType)?.label || "";
 

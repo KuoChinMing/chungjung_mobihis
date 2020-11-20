@@ -6,7 +6,7 @@
           <v-card-text class="text-center">
             <v-btn color="primary" depressed @click="openUploadPhotoDialog">
               <v-icon>mdi-cloud-upload</v-icon>
-              <span class="ml-2">照片上傳</span>
+              <span class="ml-2">{{ $t("uploadPhoto") }}</span>
             </v-btn>
           </v-card-text>
         </v-card>
@@ -16,7 +16,7 @@
     <v-dialog v-model="isUploadPhotoDialogOpen" max-width="360">
       <v-card>
         <v-toolbar flat dense>
-          <v-toolbar-title>照片上傳</v-toolbar-title>
+          <v-toolbar-title>{{ $t("uploadPhoto") }}</v-toolbar-title>
           <v-spacer></v-spacer>
           <v-icon class="ml-auto" @click="closeUploadPhotoDialog">mdi-close</v-icon>
         </v-toolbar>

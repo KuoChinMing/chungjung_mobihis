@@ -9,7 +9,7 @@
             outlined
             dense
             hide-details
-            label="病歷號"
+            :label="$t('patient.chtno')"
           ></v-text-field>
         </v-col>
         <v-col cols="12">
@@ -19,12 +19,18 @@
             outlined
             dense
             hide-details
-            label="姓名"
+            :label="$t('patient.name')"
           ></v-text-field>
         </v-col>
         <v-col cols="12">
           <!-- TODO 自動帶入登入者的科別 -->
-          <v-text-field name="section" outlined dense hide-details label="科別"></v-text-field>
+          <v-text-field
+            name="section"
+            outlined
+            dense
+            hide-details
+            :label="$t('section')"
+          ></v-text-field>
         </v-col>
         <v-col cols="12">
           <v-select
@@ -32,7 +38,7 @@
             outlined
             dense
             hide-details
-            label="時間點"
+            :label="$t('timeSection')"
             :items="timeSelectOptions"
           ></v-select>
         </v-col>
@@ -42,7 +48,7 @@
             outlined
             dense
             hide-details
-            label="照片種類"
+            :label="$t('imageType')"
             :items="imageTypeSelectOptions"
           ></v-select>
         </v-col>
@@ -52,7 +58,7 @@
             outlined
             dense
             hide-details
-            label="部位器官"
+            :label="$t('bodyPart')"
             :items="bodyPartSelectOptions"
           ></v-select>
         </v-col>
@@ -60,7 +66,7 @@
           <v-file-input
             name="file"
             accept="image/*"
-            label="照片"
+            :label="$t('image')"
             prepend-icon=""
             outlined
             dense
@@ -70,7 +76,7 @@
         <v-col cols="12" class="pb-0">
           <v-btn style="width: 100%;" color="primary" large depressed type="submit">
             <v-icon>mdi-cloud-upload</v-icon>
-            <span class="ml-2">上傳</span>
+            <span class="ml-2">{{ $t("upload") }}</span>
           </v-btn>
         </v-col>
       </v-row>
@@ -97,33 +103,9 @@ export default {
 
   data() {
     return {
-      timeSelectOptions: ["手術前", "手術中", "手術後", "門診", "病房"],
-      imageTypeSelectOptions: [
-        "傷口治療前",
-        "傷口治療後",
-        "造口治療前",
-        "造口治療後",
-        "手術中",
-        "植入物",
-        "X-ray",
-        "Angio",
-        "導航",
-        "手術計畫",
-        "皮瓣"
-      ],
-      bodyPartSelectOptions: [
-        "頭部",
-        "右上肢",
-        "右下肢",
-        "左上肢",
-        "左下肢",
-        "軀幹",
-        "背部",
-        "腹部",
-        "心臟",
-        "肺臟",
-        "膀胱"
-      ]
+      timeSelectOptions: ["TODO1", "TODO2", "TODO3", "TODO4", "TODO5"],
+      imageTypeSelectOptions: ["TODO1", "TODO2", "TODO3", "TODO4", "TODO5"],
+      bodyPartSelectOptions: ["TODO1", "TODO2", "TODO3", "TODO4", "TODO5"]
     };
   },
 

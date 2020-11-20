@@ -5,5 +5,91 @@
     "language": "語言",
     "en": "English",
     "zh": "繁體中文"
-  }
+  },
+
+  "login": {
+    "account": "帳號",
+    "password": "密碼",
+    "login": "登入",
+    "logout": "登出",
+    "register": "註冊"
+  },
+
+  "patient": {
+    "chtno": "病歷號",
+    "name": "姓名"
+  },
+
+  "label": {
+    "drug": "藥",
+    "allergy": "敏",
+    "note": "註",
+    "danger": "危",
+    "remind": "警",
+    "critical": "C",
+    "dnr": "D"
+  },
+
+  "rules": {
+    "required": "此欄位為必填項目"
+  },
+
+  "patientProfile": {
+    "patientProfile": "病患首頁",
+    "issueList": "問題列表",
+    "mainDiagnosis": "主診斷",
+    "subDiagnosis": "次診斷",
+    "bodyHeight": "身高",
+    "bodyWeight": "體重",
+    "danger": "檢驗危險值",
+    "remind": "檢驗警示值",
+    "cas": "臨床警訊(CAS)",
+    "drugAlert": "用藥安全警示",
+    "specialNote": "特別註記",
+    "allergyHistory": "過敏記錄",
+    "icCard": "IC卡",
+    "dnr": "DNR",
+    "catastrophicIllness": "重大傷病",
+    "patientSafetyNotification": "病安提示訊息",
+    "notification": "已推播訊息"
+  },
+
+  "systemTitle": "LiveAid System",
+  "section": "科別",
+  "timeSection": "時間點",
+  "imageType": "照片種類",
+  "bodyPart": "部位器官",
+  "image": "照片",
+  "upload": "上傳",
+  "dischargedPatient": "出院病患",
+  "buildings": "大樓",
+  "station": "護理站",
+  "myPatient": "我的關注病患",
+  "sectionNumber": "科別碼",
+  "bedNumber": "病床號",
+  "doctorNumber": "醫師碼",
+  "stationNumber": "護理站代碼",
+  "others": "其他",
+  "noPatient": "查無病患資料",
+  "admittedDay": "入院日",
+  "dischargedDay": "出院日",
+  "medicalRecords": "病患病歷",
+  "uploadPhoto": "照片上傳",
+  "credentialInvalid": "帳號或密碼錯誤，請重新輸入",
+  "bringMeHome": "帶我離開這裡",
+  "pageNotFound": "您找尋的網頁不存在",
+  "settings": "設定",
+  "userProfile": "基本資料",
+  "userName": "使用者",
+  "userPosition": "職稱",
+  "systemSettings": "系統設定",
+  "portSettings": "Port 設定",
+  "ipSettings": "IP 設定",
+  "aetSettings": "AET 設定",
+  "useUde": "使用 UDE",
+  "udeSettings": "UDE 設定",
+  "idoServerName": "iDO Server Name",
+  "museIpSettings": "Muse IP 設定",
+  "useRocYear": "使用明國年顯示",
+  "dischargedQueryPeriod": "出院查詢區間"
 }

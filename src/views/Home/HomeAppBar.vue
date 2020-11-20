@@ -49,14 +49,7 @@ export default {
     return {
       searchSelectedCategory: null,
       searchKeyword: "",
-      isCategorySearchShowing: false,
-      searchCategories: [
-        { label: "科別碼", value: "SEC" },
-        { label: "病床號", value: "BED" },
-        { label: "病歷號", value: "MR" },
-        { label: "醫師碼", value: "DR" },
-        { label: "護理站代碼", value: "WARD" }
-      ]
+      isCategorySearchShowing: false
     };
   },
 
@@ -64,6 +57,18 @@ export default {
     title: {
       type: String,
       default: ""
+    }
+  },
+
+  computed: {
+    searchCategories() {
+      return [
+        { label: this.$t("sectionNumber"), value: "SEC" },
+        { label: this.$t("bedNumber"), value: "BED" },
+        { label: this.$t("patient.chtno"), value: "MR" },
+        { label: this.$t("doctorNumber"), value: "DR" },
+        { label: this.$t("stationNumber"), value: "WARD" }
+      ];
     }
   },
 

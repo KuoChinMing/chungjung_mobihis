@@ -68,26 +68,6 @@ const routes = [
                 component: () => import(`@/views/Patient/PatientProfile.vue`)
               },
               {
-                path: "vitalSign",
-                name: "PatientVitalSign",
-                component: () => import(`@/views/Patient/PatientVitalSign.vue`)
-              },
-              {
-                path: "lab",
-                name: "PatientLab",
-                component: () => import(`@/views/Patient/PatientLab.vue`)
-              },
-              {
-                path: "image",
-                name: "PatientImage",
-                component: () => import(`@/views/Patient/PatientImage.vue`)
-              },
-              {
-                path: "exam",
-                name: "PatientExam",
-                component: () => import(`@/views/Patient/PatientExam.vue`)
-              },
-              {
                 path: "photo",
                 name: "PatientPhoto",
                 component: () => import(`@/views/Patient/PatientPhoto.vue`)
