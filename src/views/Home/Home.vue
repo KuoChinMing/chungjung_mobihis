@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapGetters, mapState } from "vuex";
 import HomeAppBar from "./HomeAppBar.vue";
 import PatientList from "@/views/Home/PatientList.vue";
 import axios from "@/plugins/axios.js";
@@ -41,6 +41,7 @@ export default {
 
   computed: {
     ...mapState(["account"]),
+    ...mapGetters(["searchCategories"]),
     pageTitle() {
       const { qryType, parameter } = this.$route.query;
 
@@ -49,14 +50,8 @@ export default {
       }
 
       // TODO: searchCategories 抽成全域
-      const searchCategories = [
-        { label: this.$t("sectionNumber"), value: "SEC" },
-        { label: this.$t("bedNumber"), value: "BED" },
-        { label: this.$t("patient.chtno"), value: "MR" },
-        { label: this.$t("doctorNumber"), value: "DR" },
-        { label: this.$t("stationNumber"), value: "WARD" }
-      ];
-      const category = searchCategories.find(cateogry => cateogry.value === qryType)?.label || "";
+      const category =
+        this.searchCategories.find(cateogry => cateogry.value === qryType)?.label || "";
 
       return `${category} ${parameter}`;
     }

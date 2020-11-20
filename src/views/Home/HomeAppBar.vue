@@ -10,22 +10,23 @@
 
     <v-spacer></v-spacer>
 
-    <!-- TODO: 換頁時 categorySearch 清空 -->
+    <!-- TODO: 換頁時 categorySearch 清空， blur, focus 優化 -->
     <!-- <v-expand-x-transition> -->
     <div width="100%" v-show="isCategorySearchShowing">
       <CategorySearch
         light
+        autofocus
+        class="elevation-0"
         v-model="searchKeyword"
         :categories="searchCategories"
         :selectedCategory="searchSelectedCategory"
         @selectCateogry="selectCateogry"
         @search="search"
-        class="elevation-0"
       />
     </div>
     <!-- </v-expand-x-transition> -->
 
-    <v-btn icon @click="isCategorySearchShowing = true" v-show="!isCategorySearchShowing">
+    <v-btn icon @click="toggleCategorySearch" v-show="!isCategorySearchShowing">
       <v-icon>mdi-magnify</v-icon>
     </v-btn>
 
@@ -37,6 +38,7 @@
 
 <script>
 import CategorySearch from "@/components/CategorySearch.vue";
+import { mapGetters } from "vuex";
 
 export default {
   name: "HomeAppBar",
@@ -61,18 +63,20 @@ export default {
   },
 
   computed: {
-    searchCategories() {
-      return [
-        { label: this.$t("sectionNumber"), value: "SEC" },
-        { label: this.$t("bedNumber"), value: "BED" },
-        { label: this.$t("patient.chtno"), value: "MR" },
-        { label: this.$t("doctorNumber"), value: "DR" },
-        { label: this.$t("stationNumber"), value: "WARD" }
-      ];
+    ...mapGetters(["searchCategories"])
+  },
+
+  watch: {
+    // for i18n
+    searchCategories(newValue) {
+      this.searchSelectedCategory = newValue[0];
     }
   },
 
   methods: {
+    toggleCategorySearch() {
+      this.isCategorySearchShowing = !this.isCategorySearchShowing;
+    },
     toggleHomeNavigationDrawer() {
       this.$store.commit("toggleHomeNavigationDrawer", true);
     },

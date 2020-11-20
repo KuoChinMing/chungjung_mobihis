@@ -1,5 +1,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
+import staticVar from "./staticVar.js";
 import axiosOriginal from "axios";
 import axios from "@/plugins/axios.js";
 import jwt_decode from "jwt-decode";
@@ -18,6 +19,9 @@ export default new Vuex.Store({
     stationList: [],
     patientInfo: null,
     account: tokenPayload["unique_name"] || ""
+  },
+  getters: {
+    ...staticVar.getters
   },
   mutations: {
     account(state, account) {
