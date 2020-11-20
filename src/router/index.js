@@ -1,5 +1,6 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
+import { translation } from "@/plugins/translation.js";
 import axios from "@/plugins/axios";
 
 Vue.use(VueRouter);
@@ -10,96 +11,109 @@ function load(component) {
 
 const routes = [
   {
-    path: "/login",
-    name: "Login",
-    component: load("Login"),
-    beforeEnter: (to, from, next) => {
-      if (localStorage.getItem("token")) {
-        next({ name: "Home" });
-      } else {
-        next();
-      }
-    }
-  },
-  {
-    path: "",
-    component: load("BaseLayout"),
-    meta: { requiresAuth: true },
+    path: "/:locale",
+    component: { template: "<router-view />" },
+    beforeEnter: translation.routeMiddleware,
     children: [
       {
-        path: "/",
-        component: () => import(`@/views/Home/HomeBaseLayout.vue`),
+        path: "login",
+        name: "Login",
+        component: load("Login"),
+        beforeEnter: (to, from, next) => {
+          if (localStorage.getItem("token")) {
+            next({ name: "Home" });
+          } else {
+            next();
+          }
+        }
+      },
+      {
+        path: "",
+        component: load("BaseLayout"),
+        meta: { requiresAuth: true },
         children: [
           {
             path: "",
-            name: "Home",
-            component: () => import(`@/views/Home/Home.vue`)
+            component: () => import(`@/views/Home/HomeBaseLayout.vue`),
+            children: [
+              {
+                path: "",
+                name: "Home",
+                component: () => import(`@/views/Home/Home.vue`)
+              },
+              {
+                path: "discharged",
+                name: "Discharged",
+                component: () => import(`@/views/Home/Discharged.vue`)
+              },
+              {
+                path: "station/:station",
+                name: "Station",
+                component: () => import(`@/views/Home/Station.vue`)
+              },
+              {
+                path: "section/:section",
+                name: "Section",
+                component: () => import(`@/views/Home/Section.vue`)
+              }
+            ]
           },
           {
-            path: "discharged",
-            name: "Discharged",
-            component: () => import(`@/views/Home/Discharged.vue`)
+            path: "admission/:admissionKey",
+            component: () => import(`@/views/Patient/Patient.vue`),
+            children: [
+              {
+                path: "",
+                name: "PatientProfile",
+                component: () => import(`@/views/Patient/PatientProfile.vue`)
+              },
+              {
+                path: "vitalSign",
+                name: "PatientVitalSign",
+                component: () => import(`@/views/Patient/PatientVitalSign.vue`)
+              },
+              {
+                path: "lab",
+                name: "PatientLab",
+                component: () => import(`@/views/Patient/PatientLab.vue`)
+              },
+              {
+                path: "image",
+                name: "PatientImage",
+                component: () => import(`@/views/Patient/PatientImage.vue`)
+              },
+              {
+                path: "exam",
+                name: "PatientExam",
+                component: () => import(`@/views/Patient/PatientExam.vue`)
+              },
+              {
+                path: "photo",
+                name: "PatientPhoto",
+                component: () => import(`@/views/Patient/PatientPhoto.vue`)
+              }
+            ]
           },
           {
-            path: "station/:station",
-            name: "Station",
-            component: () => import(`@/views/Home/Station.vue`)
-          },
-          {
-            path: "section/:section",
-            name: "Section",
-            component: () => import(`@/views/Home/Section.vue`)
+            path: "settings",
+            name: "Settings",
+            component: load("Settings")
           }
         ]
       },
       {
-        path: "/admission/:admissionKey",
-        component: () => import(`@/views/Patient/Patient.vue`),
-        children: [
-          {
-            path: "",
-            name: "PatientProfile",
-            component: () => import(`@/views/Patient/PatientProfile.vue`)
-          },
-          {
-            path: "vitalSign",
-            name: "PatientVitalSign",
-            component: () => import(`@/views/Patient/PatientVitalSign.vue`)
-          },
-          {
-            path: "lab",
-            name: "PatientLab",
-            component: () => import(`@/views/Patient/PatientLab.vue`)
-          },
-          {
-            path: "image",
-            name: "PatientImage",
-            component: () => import(`@/views/Patient/PatientImage.vue`)
-          },
-          {
-            path: "exam",
-            name: "PatientExam",
-            component: () => import(`@/views/Patient/PatientExam.vue`)
-          },
-          {
-            path: "photo",
-            name: "PatientPhoto",
-            component: () => import(`@/views/Patient/PatientPhoto.vue`)
-          }
-        ]
-      },
-      {
-        path: "/settings",
-        name: "Settings",
-        component: load("Settings")
+        path: "404",
+        alias: "*",
+        name: "NotFound",
+        component: load("NotFound")
       }
     ]
   },
   {
-    path: "/404",
-    alias: "*",
-    name: "NotFound",
-    component: load("NotFound")
+    path: "/",
+    redirect() {
+      return translation.defaultLocale;
+    }
   }
 ];
 

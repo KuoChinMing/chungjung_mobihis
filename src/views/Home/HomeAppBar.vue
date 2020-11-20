@@ -10,6 +10,7 @@
 
     <v-spacer></v-spacer>
 
+    <!-- TODO: 換頁時 categorySearch 清空 -->
     <!-- <v-expand-x-transition> -->
     <div width="100%" v-show="isCategorySearchShowing">
       <CategorySearch
@@ -64,10 +65,6 @@ export default {
       type: String,
       default: ""
     }
-  },
-
-  updated() {
-    console.log("hello");
   },
 
   methods: {

@@ -1,6 +1,11 @@
 <template>
   <div>
-    <SettingsAppBar color="primary" dark title="設定" />
+    <v-app-bar color="primary" dark>
+      <v-btn icon @click="routerBack">
+        <v-icon>mdi-chevron-left</v-icon>
+      </v-btn>
+      <v-toolbar-title>設定</v-toolbar-title>
+    </v-app-bar>
 
     <v-container fluid>
       <v-row>
@@ -37,6 +42,37 @@
                     <v-list-item-title>系統設定</v-list-item-title>
                   </v-list-item-content>
                 </template>
+                <v-list-item>
+                  <v-list-item-content>
+                    <v-list-item-title>{{ $t("language.language") }}</v-list-item-title>
+                  </v-list-item-content>
+                  <v-list-item-action>
+                    <v-menu offset-y>
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-list-item-title v-bind="attrs" v-on="on">
+                          {{ $t("language." + currentLocale) }}
+                          <v-icon small>mdi-chevron-down</v-icon>
+                        </v-list-item-title>
+                      </template>
+                      <v-card max-height="200">
+                        <v-list dense>
+                          <v-list-item-group :value="currentLocale" prepend-icon="mdi-close">
+                            <v-list-item
+                              v-for="(locale, index) in supportedLocales"
+                              :key="index"
+                              :value="locale"
+                              @click="switchLocale(locale)"
+                            >
+                              <v-list-item-title>
+                                {{ $t("language." + locale) }}
+                              </v-list-item-title>
+                            </v-list-item>
+                          </v-list-item-group>
+                        </v-list>
+                      </v-card>
+                    </v-menu>
+                  </v-list-item-action>
+                </v-list-item>
                 <v-list-item>
                   <v-list-item-content>
                     <v-list-item-title>使用明國年顯示</v-list-item-title>
@@ -143,7 +179,6 @@
                 <v-list-item-icon>
                   <v-icon>mdi-account-arrow-right</v-icon>
                 </v-list-item-icon>
-
                 <v-list-item-content>
                   <v-list-item-title>登出</v-list-item-title>
                 </v-list-item-content>
@@ -157,17 +192,15 @@
 </template>
 
 <script>
-import SettingsAppBar from "@/views/SettingsAppBar.vue";
+import { mapState } from "vuex";
+import { translation } from "@/plugins/translation.js";
 
 export default {
   name: "Settings",
 
-  components: {
-    SettingsAppBar
-  },
-
   data() {
     return {
+      prevRoute: null,
       selectedPeriod: "todo",
       periods: [
         "一週",
@@ -185,12 +218,35 @@ export default {
   },
 
   computed: {
-    account() {
-      return this.$store.state.account;
+    ...mapState(["account"]),
+    currentLocale() {
+      return translation.currentLocale;
+    },
+    supportedLocales() {
+      return translation.supportedLocales;
     }
   },
 
+  beforeRouteEnter(to, from, next) {
+    next(vm => {
+      vm.prevRoute = from;
+    });
+  },
+
   methods: {
+    routerBack() {
+      this.$router.push({
+        name: this.prevRoute.name || "Home",
+        params: { ...this.prevRoute.params, locale: translation.currentLocale }
+      });
+    },
+    switchLocale(locale) {
+      if (locale === translation.currentLocale) return;
+      const to = this.$router.resolve({ params: { locale } });
+      translation.changeLocale(locale).then(() => {
+        this.$router.replace(to.location);
+      });
+    },
     logout() {
       localStorage.clear();
       this.$router.push({ name: "Login" });
@@ -198,12 +254,3 @@ export default {
   }
 };
 </script>
-
-<style lang="scss" scoped>
-.v-select__selections input {
-  display: none;
-}
-.select {
-  min-width: 100px;
-}
-</style>
