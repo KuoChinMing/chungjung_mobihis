@@ -1,130 +1,130 @@
 <template>
-  <v-container fluid>
+  <!-- <v-container fluid>
     <v-row>
-      <v-col cols="12">
-        <v-card v-if="!isDangerLoading">
-          <v-container fluid v-if="danger">
-            <v-row>
-              <v-col cols="12">
-                <div class="text-subtitle-1 font-weight-bold">
-                  {{ $t("patientProfile.issueList") }}
-                </div>
-                <span class="text-body-2">{{ danger.ProblemList || "--" }}</span>
-              </v-col>
-              <v-col cols="12">
-                <div class="text-subtitle-1 font-weight-bold">
-                  {{ $t("patientProfile.mainDiagnosis") }}
-                </div>
-                <span class="text-body-2">{{ danger.MainDiagnosis || "--" }} </span>
-              </v-col>
-              <v-col cols="12">
-                <div class="text-subtitle-1 font-weight-bold">
-                  {{ $t("patientProfile.subDiagnosis") }}
-                </div>
-                <span class="text-body-2">{{ danger.SubDiagnosis || "--" }} </span>
-              </v-col>
-              <v-col cols="6">
-                <div class="text-subtitle-1 font-weight-bold">
-                  {{ $t("patientProfile.bodyHeight") }}
-                </div>
-                <span class="text-body-2">{{ danger.BodyHeight || "--" }} cm</span>
-              </v-col>
-              <v-col cols="6">
-                <div class="text-subtitle-1 font-weight-bold">
-                  {{ $t("patientProfile.bodyWeight") }}
-                </div>
-                <span class="text-body-2">{{ danger.BodyWeight || "--" }} kg</span>
-              </v-col>
-              <v-col cols="6">
-                <div class="text-subtitle-1 font-weight-bold">
-                  {{ $t("admittedDay") }}
-                </div>
-                <span class="text-body-2">TODO</span>
-              </v-col>
-              <v-col cols="6">
-                <div class="text-subtitle-1 font-weight-bold">{{ $t("dischargedDay") }}</div>
-                <span class="text-body-2">TODO</span>
-              </v-col>
-              <v-col cols="12" sm="6">
-                <div class="text-subtitle-1 font-weight-bold">
-                  {{ $t("patientProfile.patientSafetyNotification") }} -
-                  {{ $t("patientProfile.danger") }}
-                </div>
-                <span class="text-body-2">{{ danger.Danger || "--" }}</span>
-              </v-col>
-              <v-col cols="12" sm="6">
-                <div class="text-subtitle-1 font-weight-bold">
-                  {{ $t("patientProfile.patientSafetyNotification") }} -
-                  {{ $t("patientProfile.remind") }}
-                </div>
-                <span class="text-body-2">{{ danger.Remind || "--" }}</span>
-              </v-col>
-              <v-col cols="12" sm="6">
-                <div class="text-subtitle-1 font-weight-bold">
-                  {{ $t("patientProfile.patientSafetyNotification") }} -
-                  {{ $t("patientProfile.cas") }}
-                </div>
-                <span v-if="danger.CAS_EvaluationItem">
-                  <div
-                    class="text-body-2"
-                    v-for="item in danger.CAS_EvaluationItem.split('\r\n')"
-                    :key="item"
-                  >
-                    {{ item }}
-                  </div>
-                </span>
-                <span v-else>--</span>
-              </v-col>
-              <v-col cols="12" sm="6">
-                <div class="text-subtitle-1 font-weight-bold">
-                  {{ $t("patientProfile.patientSafetyNotification") }} -
-                  {{ $t("patientProfile.drugAlert") }}
-                </div>
-                <!-- TODO 接資料 -->
-                <span class="text-body-2">TODO</span>
-              </v-col>
-              <v-col cols="12" sm="6">
-                <div class="text-subtitle-1 font-weight-bold">
-                  {{ $t("patientProfile.specialNote") }} - {{ $t("patientProfile.allergyHistory") }}
-                </div>
-                <span class="text-body-2">{{ danger.Allergy || "--" }}</span>
-              </v-col>
-              <v-col cols="12" sm="6">
-                <div class="text-subtitle-1 font-weight-bold">
-                  {{ $t("patientProfile.specialNote") }} -
-                  {{ $t("patientProfile.catastrophicIllness") }}
-                </div>
-                <span class="text-body-2">{{ danger.MajorInjuries || "--" }}</span>
-              </v-col>
-              <v-col cols="12" sm="6">
-                <div class="text-subtitle-1 font-weight-bold">
-                  {{ $t("patientProfile.specialNote") }} - {{ $t("patientProfile.dnr") }}
-                </div>
-                <span class="text-body-2">{{ danger.DNR || "--" }}</span>
-              </v-col>
-              <v-col cols="12" sm="6">
-                <div class="text-subtitle-1 font-weight-bold">
-                  {{ $t("patientProfile.specialNote") }} - {{ $t("patientProfile.icCard") }}
-                </div>
-                <span class="text-body-2">{{ danger.ICCardNote || "--" }}</span>
-              </v-col>
-              <v-col cols="12" sm="6">
-                <div class="text-subtitle-1 font-weight-bold">
-                  {{ $t("patientProfile.notification") }}
-                </div>
-                <!-- TODO 接資料 -->
-                <span class="text-body-2">TODO</span>
-              </v-col>
-            </v-row>
-          </v-container>
-        </v-card>
+      <v-col cols="12"> -->
+  <v-card v-if="!isDangerLoading" flat>
+    <v-container fluid v-if="danger">
+      <v-row>
+        <v-col cols="12">
+          <div class="text-subtitle-1 font-weight-bold">
+            {{ $t("patientProfile.issueList") }}
+          </div>
+          <span class="text-body-2">{{ danger.ProblemList || "--" }}</span>
+        </v-col>
+        <v-col cols="12">
+          <div class="text-subtitle-1 font-weight-bold">
+            {{ $t("patientProfile.mainDiagnosis") }}
+          </div>
+          <span class="text-body-2">{{ danger.MainDiagnosis || "--" }} </span>
+        </v-col>
+        <v-col cols="12">
+          <div class="text-subtitle-1 font-weight-bold">
+            {{ $t("patientProfile.subDiagnosis") }}
+          </div>
+          <span class="text-body-2">{{ danger.SubDiagnosis || "--" }} </span>
+        </v-col>
+        <v-col cols="6">
+          <div class="text-subtitle-1 font-weight-bold">
+            {{ $t("patientProfile.bodyHeight") }}
+          </div>
+          <span class="text-body-2">{{ danger.BodyHeight || "--" }} cm</span>
+        </v-col>
+        <v-col cols="6">
+          <div class="text-subtitle-1 font-weight-bold">
+            {{ $t("patientProfile.bodyWeight") }}
+          </div>
+          <span class="text-body-2">{{ danger.BodyWeight || "--" }} kg</span>
+        </v-col>
+        <v-col cols="6">
+          <div class="text-subtitle-1 font-weight-bold">
+            {{ $t("admittedDay") }}
+          </div>
+          <span class="text-body-2">TODO</span>
+        </v-col>
+        <v-col cols="6">
+          <div class="text-subtitle-1 font-weight-bold">{{ $t("dischargedDay") }}</div>
+          <span class="text-body-2">TODO</span>
+        </v-col>
+        <v-col cols="12" sm="6">
+          <div class="text-subtitle-1 font-weight-bold">
+            {{ $t("patientProfile.patientSafetyNotification") }} -
+            {{ $t("patientProfile.danger") }}
+          </div>
+          <span class="text-body-2">{{ danger.Danger || "--" }}</span>
+        </v-col>
+        <v-col cols="12" sm="6">
+          <div class="text-subtitle-1 font-weight-bold">
+            {{ $t("patientProfile.patientSafetyNotification") }} -
+            {{ $t("patientProfile.remind") }}
+          </div>
+          <span class="text-body-2">{{ danger.Remind || "--" }}</span>
+        </v-col>
+        <v-col cols="12" sm="6">
+          <div class="text-subtitle-1 font-weight-bold">
+            {{ $t("patientProfile.patientSafetyNotification") }} -
+            {{ $t("patientProfile.cas") }}
+          </div>
+          <span v-if="danger.CAS_EvaluationItem">
+            <div
+              class="text-body-2"
+              v-for="item in danger.CAS_EvaluationItem.split('\r\n')"
+              :key="item"
+            >
+              {{ item }}
+            </div>
+          </span>
+          <span v-else>--</span>
+        </v-col>
+        <v-col cols="12" sm="6">
+          <div class="text-subtitle-1 font-weight-bold">
+            {{ $t("patientProfile.patientSafetyNotification") }} -
+            {{ $t("patientProfile.drugAlert") }}
+          </div>
+          <!-- TODO 接資料 -->
+          <span class="text-body-2">TODO</span>
+        </v-col>
+        <v-col cols="12" sm="6">
+          <div class="text-subtitle-1 font-weight-bold">
+            {{ $t("patientProfile.specialNote") }} - {{ $t("patientProfile.allergyHistory") }}
+          </div>
+          <span class="text-body-2">{{ danger.Allergy || "--" }}</span>
+        </v-col>
+        <v-col cols="12" sm="6">
+          <div class="text-subtitle-1 font-weight-bold">
+            {{ $t("patientProfile.specialNote") }} -
+            {{ $t("patientProfile.catastrophicIllness") }}
+          </div>
+          <span class="text-body-2">{{ danger.MajorInjuries || "--" }}</span>
+        </v-col>
+        <v-col cols="12" sm="6">
+          <div class="text-subtitle-1 font-weight-bold">
+            {{ $t("patientProfile.specialNote") }} - {{ $t("patientProfile.dnr") }}
+          </div>
+          <span class="text-body-2">{{ danger.DNR || "--" }}</span>
+        </v-col>
+        <v-col cols="12" sm="6">
+          <div class="text-subtitle-1 font-weight-bold">
+            {{ $t("patientProfile.specialNote") }} - {{ $t("patientProfile.icCard") }}
+          </div>
+          <span class="text-body-2">{{ danger.ICCardNote || "--" }}</span>
+        </v-col>
+        <v-col cols="12" sm="6">
+          <div class="text-subtitle-1 font-weight-bold">
+            {{ $t("patientProfile.notification") }}
+          </div>
+          <!-- TODO 接資料 -->
+          <span class="text-body-2">TODO</span>
+        </v-col>
+      </v-row>
+    </v-container>
+  </v-card>
 
-        <div v-else class="text-center py-3">
-          <v-progress-circular indeterminate color="primary"></v-progress-circular>
-        </div>
-      </v-col>
+  <div v-else class="text-center py-3">
+    <v-progress-circular indeterminate color="primary"></v-progress-circular>
+  </div>
+  <!-- </v-col>
     </v-row>
-  </v-container>
+  </v-container> -->
 </template>
 
 <script>

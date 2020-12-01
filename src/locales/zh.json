@@ -54,6 +54,12 @@
     "notification": "已推播訊息"
   },
 
+  "uploadImage": {
+    "previos": "上一步",
+    "next": "下一步",
+    "upload": "上傳"
+  },
+
   "systemTitle": "LiveAid System",
   "section": "科別",
   "timeSection": "時間點",
