@@ -55,9 +55,11 @@
   },
 
   "uploadImage": {
-    "previos": "上一步",
-    "next": "下一步",
-    "upload": "上傳"
+    "upload": "上傳",
+    "division": "科別",
+    "bodyPart": "部位",
+    "timepoint": "時間",
+    "category": "種類"
   },
 
   "systemTitle": "LiveAid System",

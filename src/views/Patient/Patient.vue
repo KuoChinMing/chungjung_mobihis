@@ -79,110 +79,286 @@
       </v-row>
 
       <!-- TODO upload photo dialog 包成 component -->
-      <v-dialog v-model="isUploadPhotoDialogOpen" max-width="520" persistent>
+      <v-dialog v-model="isUploadPhotoDialogOpen" persistent scrollable>
         <v-card>
           <v-toolbar dense flat>
             <v-spacer></v-spacer>
             <v-icon @click="closeUploadPhotoDialog">mdi-close</v-icon>
           </v-toolbar>
 
-          <v-window v-model="uploadImageStep">
-            <v-window-item :value="1">
-              <v-container fluid>
-                <!-- <v-row dense>
+          <v-divider></v-divider>
+
+          <v-card-text style="height: 100%" class="py-0">
+            <v-container fluid>
+              <!-- <v-row dense>
               <v-col>
                 <v-switch class="float-right mt-0" dense hide-details>color</v-switch>
               </v-col>
             </v-row> -->
-                <v-row>
-                  <v-col cols="6" sm="4" v-for="(image, index) in base64Images" :key="index">
-                    <v-card
-                      class="mx-auto"
-                      style="width: 100%;"
-                      color="white"
-                      height="140px"
-                      @mouseover="showDeleteButton"
-                    >
-                      <img :src="image" style=" width: 100%; height: 100%; object-fit: contain" />
-                      <v-badge
-                        bordered
-                        color="primary"
-                        icon="mdi-check"
-                        left
-                        offset-x="-4"
-                        offset-y="-4"
-                      >
-                      </v-badge>
-                    </v-card>
-                  </v-col>
-                  <v-col cols="6" sm="4">
-                    <label for="inputImage">
-                      <v-card
-                        class="mx-auto d-flex justify-center align-center"
-                        style="width: 100%;"
-                        color="grey lighten-4"
-                        height="140px"
-                      >
-                        <v-icon>mdi-camera-plus</v-icon>
-                      </v-card>
-                    </label>
-                    <input
-                      ref="inputedImage"
-                      id="inputImage"
-                      class="d-none"
-                      name="file"
-                      accept="image/*"
-                      type="file"
-                      multiple
-                      @change="loadImage"
-                    />
-                  </v-col>
-                </v-row>
-              </v-container>
-            </v-window-item>
 
-            <v-window-item :value="2">
-              <v-container>
-                <v-row v-if="patientInfo">
-                  <v-col> </v-col>
-                  <v-col cols="6">
-                    <v-menu offset-y>
-                      <template v-slot:activator="{ on, attrs }">
-                        <v-btn text v-bind="attrs" v-on="on">
-                          <span v-if="selectedSection">{{ selectedSection.label }}</span>
-                          <span v-else>科別</span>
-                          <v-icon small>mdi-chevron-down</v-icon>
-                        </v-btn>
-                      </template>
-                      <v-list dense>
-                        <v-list-item-group v-model="selectedSection">
-                          <v-list-item
-                            v-for="(section, index) in sections"
-                            :key="index"
-                            :value="section"
-                          >
-                            <v-list-item-title>{{ section.label }}</v-list-item-title>
-                          </v-list-item>
-                        </v-list-item-group>
-                      </v-list>
-                    </v-menu>
-                  </v-col>
-                </v-row>
-              </v-container>
-            </v-window-item>
-          </v-window>
+              <v-row justify="center">
+                <v-col v-for="(image, index) in images" :key="index" cols="12" sm="6" md="4" lg="3">
+                  <v-card
+                    wdith="100%"
+                    color="grey lighten-4"
+                    @click="image.selected = !image.selected"
+                    :ripple="false"
+                  >
+                    <div class="pa-3">
+                      <v-card outlined height="140" width="100%" min-width="140">
+                        <img
+                          :src="image.base64"
+                          style=" width: 100%; height: 100%; object-fit: contain"
+                        />
+                        <v-badge
+                          v-show="image.selected"
+                          bordered
+                          color="primary"
+                          icon="mdi-check"
+                          offset-x="12"
+                          offset-y="-126"
+                        ></v-badge>
+                      </v-card>
+                    </div>
+
+                    <v-container>
+                      <v-row dense>
+                        <v-col cols="6">
+                          <v-menu offset-y>
+                            <template v-slot:activator="{ on, attrs }">
+                              <v-btn depressed v-bind="attrs" v-on="on" width="100%" @click.stop>
+                                <span v-if="image.division">
+                                  {{ image.division.label }}
+                                </span>
+                                <span v-else>
+                                  {{ $t("uploadImage.division") }}
+                                  <v-icon small>mdi-chevron-down</v-icon>
+                                </span>
+                              </v-btn>
+                            </template>
+                            <v-list dense>
+                              <v-list-item-group v-model="image.division">
+                                <v-list-item
+                                  v-for="(division, index) in division"
+                                  :key="index"
+                                  :value="division"
+                                >
+                                  <v-list-item-title>{{ division.label }}</v-list-item-title>
+                                </v-list-item>
+                              </v-list-item-group>
+                            </v-list>
+                          </v-menu>
+                        </v-col>
+                        <v-col cols="6">
+                          <v-menu offset-y>
+                            <template v-slot:activator="{ on, attrs }">
+                              <v-btn depressed v-bind="attrs" v-on="on" width="100%" @click.stop>
+                                <span v-if="image.bodyPart">
+                                  {{ image.bodyPart.label }}
+                                </span>
+                                <span v-else>
+                                  {{ $t("uploadImage.bodyPart") }}
+                                  <v-icon small>mdi-chevron-down</v-icon>
+                                </span>
+                              </v-btn>
+                            </template>
+                            <v-list dense>
+                              <v-list-item-group v-model="image.bodyPart">
+                                <v-list-item
+                                  v-for="(bodyPart, index) in bodyPart"
+                                  :key="index"
+                                  :value="bodyPart"
+                                >
+                                  <v-list-item-title>{{ bodyPart.label }}</v-list-item-title>
+                                </v-list-item>
+                              </v-list-item-group>
+                            </v-list>
+                          </v-menu>
+                        </v-col>
+                        <v-col cols="6">
+                          <v-menu offset-y>
+                            <template v-slot:activator="{ on, attrs }">
+                              <v-btn depressed v-bind="attrs" v-on="on" width="100%" @click.stop>
+                                <span v-if="image.timepoint">
+                                  {{ image.timepoint.label }}
+                                </span>
+                                <span v-else>
+                                  {{ $t("uploadImage.timepoint") }}
+                                  <v-icon small>mdi-chevron-down</v-icon>
+                                </span>
+                              </v-btn>
+                            </template>
+                            <v-list dense>
+                              <v-list-item-group v-model="image.timepoint">
+                                <v-list-item
+                                  v-for="(timepoint, index) in timepoint"
+                                  :key="index"
+                                  :value="timepoint"
+                                >
+                                  <v-list-item-title>{{ timepoint.label }}</v-list-item-title>
+                                </v-list-item>
+                              </v-list-item-group>
+                            </v-list>
+                          </v-menu>
+                        </v-col>
+                        <v-col cols="6">
+                          <v-menu offset-y>
+                            <template v-slot:activator="{ on, attrs }">
+                              <v-btn depressed v-bind="attrs" v-on="on" width="100%" @click.stop>
+                                <span v-if="image.category">
+                                  {{ image.category.label }}
+                                </span>
+                                <span v-else>
+                                  {{ $t("uploadImage.category") }}
+                                  <v-icon small>mdi-chevron-down</v-icon>
+                                </span>
+                              </v-btn>
+                            </template>
+                            <v-list dense>
+                              <v-list-item-group v-model="image.category">
+                                <v-list-item
+                                  v-for="(category, index) in category"
+                                  :key="index"
+                                  :value="category"
+                                >
+                                  <v-list-item-title>{{ category.label }}</v-list-item-title>
+                                </v-list-item>
+                              </v-list-item-group>
+                            </v-list>
+                          </v-menu>
+                        </v-col>
+                      </v-row>
+                    </v-container>
+                  </v-card>
+                </v-col>
+                <v-col cols="12" sm="6" md="4" lg="3">
+                  <v-card
+                    flat
+                    class="d-flex justify-center align-center"
+                    height="100%"
+                    width="100%"
+                    min-height="140"
+                  >
+                    <v-btn icon x-large class="elevation-2">
+                      <label for="inputImage">
+                        <v-icon size="24">mdi-camera-plus</v-icon>
+                      </label>
+                    </v-btn>
+                  </v-card>
+
+                  <input
+                    ref="inputedImage"
+                    id="inputImage"
+                    class="d-none"
+                    name="file"
+                    accept="image/*"
+                    type="file"
+                    multiple
+                    @change="loadImage"
+                  />
+                </v-col>
+              </v-row>
+            </v-container>
+          </v-card-text>
+
+          <v-divider></v-divider>
+
+          <v-card-actions v-show="selectedImages.length > 0">
+            <v-container class="pa-0">
+              <v-row dense class="ma-0">
+                <v-col cols="3">
+                  <v-menu offset-y>
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-btn depressed v-bind="attrs" v-on="on" width="100%">
+                        {{ $t("uploadImage.division") }}
+                        <v-icon small>mdi-chevron-down</v-icon>
+                      </v-btn>
+                    </template>
+                    <v-list dense>
+                      <v-list-item-group @change="setSelectedImagesProperty('division', $event)">
+                        <v-list-item
+                          v-for="(division, index) in division"
+                          :key="index"
+                          :value="division"
+                        >
+                          <v-list-item-title>{{ division.label }}</v-list-item-title>
+                        </v-list-item>
+                      </v-list-item-group>
+                    </v-list>
+                  </v-menu>
+                </v-col>
+                <v-col cols="3">
+                  <v-menu offset-y>
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-btn depressed v-bind="attrs" v-on="on" width="100%">
+                        {{ $t("uploadImage.bodyPart") }}
+                        <v-icon small>mdi-chevron-down</v-icon>
+                      </v-btn>
+                    </template>
+                    <v-list dense>
+                      <v-list-item-group @change="setSelectedImagesProperty('bodyPart', $event)">
+                        <v-list-item
+                          v-for="(bodyPart, index) in bodyPart"
+                          :key="index"
+                          :value="bodyPart"
+                        >
+                          <v-list-item-title>{{ bodyPart.label }}</v-list-item-title>
+                        </v-list-item>
+                      </v-list-item-group>
+                    </v-list>
+                  </v-menu>
+                </v-col>
+                <v-col cols="3">
+                  <v-menu offset-y>
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-btn depressed v-bind="attrs" v-on="on" width="100%">
+                        {{ $t("uploadImage.timepoint") }}
+                        <v-icon small>mdi-chevron-down</v-icon>
+                      </v-btn>
+                    </template>
+                    <v-list dense>
+                      <v-list-item-group @change="setSelectedImagesProperty('timepoint', $event)">
+                        <v-list-item
+                          v-for="(timepoint, index) in timepoint"
+                          :key="index"
+                          :value="timepoint"
+                        >
+                          <v-list-item-title>{{ timepoint.label }}</v-list-item-title>
+                        </v-list-item>
+                      </v-list-item-group>
+                    </v-list>
+                  </v-menu>
+                </v-col>
+                <v-col cols="3">
+                  <v-menu offset-y>
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-btn depressed v-bind="attrs" v-on="on" width="100%">
+                        {{ $t("uploadImage.category") }}
+                        <v-icon small>mdi-chevron-down</v-icon>
+                      </v-btn>
+                    </template>
+                    <v-list dense>
+                      <v-list-item-group @change="setSelectedImagesProperty('category', $event)">
+                        <v-list-item
+                          v-for="(category, index) in category"
+                          :key="index"
+                          :value="category"
+                        >
+                          <v-list-item-title>{{ category.label }}</v-list-item-title>
+                        </v-list-item>
+                      </v-list-item-group>
+                    </v-list>
+                  </v-menu>
+                </v-col>
+              </v-row>
+            </v-container>
+          </v-card-actions>
+
+          <v-divider v-show="selectedImages.length > 0"></v-divider>
 
           <v-card-actions>
-            <v-btn text v-show="uploadImageStep > 1" @click="uploadImageStep--">
-              {{ $t("uploadImage.previos") }}
-            </v-btn>
             <v-spacer></v-spacer>
-            <v-btn text v-show="uploadImageStep < 2" @click="uploadImageStep++">
-              <!-- TODO button disalbled -->
-              <!-- :disabled="!base64Images.length" -->
-              {{ $t("uploadImage.next") }}
-            </v-btn>
-            <v-btn text v-show="uploadImageStep === 2" @click="uploadImage">
+            <v-btn text @click="uploadImage">
               {{ $t("uploadImage.upload") }}
             </v-btn>
           </v-card-actions>
@@ -204,22 +380,19 @@ export default {
     ...mapState({
       newPatientInfo: "patientInfo",
       account: "account"
-    })
+    }),
+    selectedImages() {
+      return this.images.filter(image => image.selected);
+    }
   },
 
   data() {
     return {
-      sections: [
-        {
-          label: "sec1"
-        },
-        {
-          label: "sec2"
-        }
-      ],
-      selectedSection: null,
-      uploadImageStep: 1,
-      base64Images: [],
+      division: [{ label: "sec1" }, { label: "sec2" }],
+      bodyPart: [{ label: "頭" }, { label: "手" }],
+      timepoint: [{ label: "早上" }, { label: "下午" }],
+      category: [{ label: "傷口治療前傷口治療前" }, { label: "X-ray" }],
+      images: [],
       patientInfo: null,
       isPatientInfoLoading: false,
       isUploadPhotoDialogOpen: false
@@ -231,7 +404,11 @@ export default {
   },
 
   methods: {
-    showDeleteButton() {},
+    setSelectedImagesProperty(key, value) {
+      this.selectedImages.forEach(image => {
+        image[key] = value;
+      });
+    },
     uploadImage() {
       const apiUrl = "http://asia.ebmtech.com/StoreVideo/StoreImageAndVideo.ashx";
 
@@ -243,46 +420,36 @@ export default {
         MimeType: "image/jpeg"
       };
 
-      axiosOriginal.post(apiUrl, null, { params });
+      axiosOriginal.post(apiUrl, "1234", { params });
     },
     async loadImage() {
-      const files = this.$refs.inputedImage.files;
-      const base64Images = [];
+      const images = this.$refs.inputedImage.files;
 
-      // async
-      // const readImage = async file => {
-      //   return new Promise((resolve, reject) => {
-      //     const reader = new FileReader();
-      //     reader.readAsDataURL(file);
-      //     reader.onload = () => {
-      //       resolve(reader.result);
-      //     };
-      //     reader.onError = reject;
-      //   });
-      // };
+      const imageToBase64 = async image => {
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.readAsDataURL(image);
+          reader.onload = () => {
+            resolve(reader.result);
+          };
+          reader.onError = reject;
+        });
+      };
 
-      // const readingFile = () => {
-      //   const test = [];
-      //   for (let i = 0; i < files.length; i++) {
-      //     test.push(readImage(files[i]));
-      //   }
-      //   return test;
-      // };
-      // console.log(readingFile());
-      // const results = await Promise.all(readingFile());
-      // console.log(results);
-
-      // sync
-      for (let i = 0; i < files.length; i++) {
-        const reader = new FileReader();
-        reader.readAsDataURL(files[i]);
-        reader.onload = () => {
-          const base64data = reader.result;
-          base64Images.push(base64data);
+      for (let i = 0; i < images.length; i++) {
+        const base64 = await imageToBase64(images[i]);
+        console.log(URL.createObjectURL(images[i]));
+        const image = {
+          division: null,
+          timepoint: null,
+          category: null,
+          bodyPart: null,
+          selected: false,
+          // base64: URL.createObjectURL(images[i])
+          base64
         };
+        this.images.push(image);
       }
-
-      this.base64Images = base64Images;
     },
     openUploadPhotoDialog() {
       this.isUploadPhotoDialogOpen = true;
