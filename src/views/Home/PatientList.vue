@@ -10,16 +10,22 @@
       <v-container fluid>
         <v-row>
           <v-col
+            cols="12"
+            sm="6"
+            md="4"
+            lg="3"
             v-for="(patient, index) in patientListByDoctor"
             :key="index"
-            @click="
-              $router.push({
-                name: 'PatientProfile',
-                params: { admissionKey: patient.AdmissionKey }
-              })
-            "
           >
-            <v-card class="mx-auto" max-width="350" min-width="270">
+            <v-card
+              :ripple="false"
+              @click="
+                $router.push({
+                  name: 'PatientProfile',
+                  params: { admissionKey: patient.AdmissionKey }
+                })
+              "
+            >
               <v-list-item>
                 <v-list-item-content>
                   <v-list-item-title class="mb-3">

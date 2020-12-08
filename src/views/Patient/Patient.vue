@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- TODO  病人危險值 alert  -->
     <v-app-bar color="primary" dark>
       <v-btn icon @click="$router.back()" exact>
         <v-icon>mdi-chevron-left</v-icon>
@@ -8,6 +9,31 @@
     </v-app-bar>
 
     <v-container fluid class="fill-height">
+      <!-- TODO snackbar 做成 component -->
+      <v-snackbar v-model="successSnackbar" color="success" text centered>
+        <v-row no-gutters align="center">
+          <v-icon color="success">mdi-check-circle</v-icon>
+          <span class="ml-1">上傳成功</span>
+        </v-row>
+        <template v-slot:action="{ attrs }">
+          <v-btn color="success" text v-bind="attrs" @click="successSnackbar = false">
+            關閉
+          </v-btn>
+        </template>
+      </v-snackbar>
+
+      <v-snackbar v-model="failSnackbar" color="error" text centered>
+        <v-row no-gutters align="center">
+          <v-icon color="error">mdi-check-circle</v-icon>
+          <span class="ml-1">上傳失敗</span>
+        </v-row>
+        <template v-slot:action="{ attrs }">
+          <v-btn color="red" text v-bind="attrs" @click="failSnackbar = false">
+            關閉
+          </v-btn>
+        </template>
+      </v-snackbar>
+
       <v-row>
         <v-col cols="12" v-if="!isPatientInfoLoading">
           <div v-if="patientInfo">
@@ -40,17 +66,9 @@
             <v-progress-circular indeterminate color="primary"></v-progress-circular>
           </div>
         </v-col>
-        <!-- TODO image 排版 -->
-        <v-col cols="12" v-if="patientInfo">
-          <div>
-            <v-btn icon color="primary" large class="elevation-3" @click="openUploadPhotoDialog">
-              <v-icon size="24">mdi-camera-plus</v-icon>
-            </v-btn>
-          </div>
-        </v-col>
       </v-row>
       <v-row>
-        <v-col cols="12">
+        <v-col cols="12" class="pb-12">
           <!-- <v-tabs center-active show-arrows>
             <v-tab :to="{ name: 'PatientProfile', params: $route.params }" replace exact>
               {{ $t("patientProfile.patientProfile") }}
@@ -75,12 +93,25 @@
           <keep-alive>
             <router-view />
           </keep-alive>
+
+          <v-btn
+            v-if="patientInfo"
+            color="primary"
+            class="elevation-3"
+            fab
+            fixed
+            bottom
+            right
+            @click="openUploadPhotoDialog"
+          >
+            <v-icon>mdi-camera-plus</v-icon>
+          </v-btn>
         </v-col>
       </v-row>
 
       <!-- TODO upload photo dialog 包成 component -->
       <v-dialog v-model="isUploadPhotoDialogOpen" persistent scrollable>
-        <v-card>
+        <v-card :disabled="uploadingImage">
           <v-toolbar dense flat>
             <v-spacer></v-spacer>
             <v-icon @click="closeUploadPhotoDialog">mdi-close</v-icon>
@@ -90,11 +121,30 @@
 
           <v-card-text style="height: 100%" class="py-0">
             <v-container fluid>
-              <!-- <v-row dense>
-              <v-col>
-                <v-switch class="float-right mt-0" dense hide-details>color</v-switch>
-              </v-col>
-            </v-row> -->
+              <v-row dense v-if="images.length > 0">
+                <v-col cols="auto" v-if="selectedImages.length === 0">
+                  <v-btn small depressed @click="selectAll">全選</v-btn>
+                </v-col>
+                <v-col cols="auto" v-else>
+                  <v-btn small depressed @click="clearSelect">清除所選</v-btn>
+                </v-col>
+                <v-spacer></v-spacer>
+                <v-col cols="auto">
+                  <v-switch
+                    color="primary"
+                    dense
+                    hide-details
+                    class="mt-0 caption"
+                    v-model="greyMode"
+                  >
+                    <template #label>
+                      <span class="caption font-weight-medium grey--text text--darken-3">
+                        灰色模式
+                      </span>
+                    </template>
+                  </v-switch>
+                </v-col>
+              </v-row>
 
               <v-row justify="center">
                 <v-col v-for="(image, index) in images" :key="index" cols="12" sm="6" md="4" lg="3">
@@ -105,9 +155,15 @@
                     :ripple="false"
                   >
                     <div class="pa-3">
-                      <v-card outlined height="140" width="100%" min-width="140">
+                      <v-card
+                        outlined
+                        height="140"
+                        width="100%"
+                        min-width="140"
+                        :color="greyMode ? 'grey lighten-4' : 'white'"
+                      >
                         <img
-                          :src="image.base64"
+                          :src="image.url"
                           style=" width: 100%; height: 100%; object-fit: contain"
                         />
                         <v-badge
@@ -237,10 +293,10 @@
                     class="d-flex justify-center align-center"
                     height="100%"
                     width="100%"
-                    min-height="140"
+                    min-height="100"
                   >
                     <v-btn icon x-large class="elevation-2">
-                      <label for="inputImage">
+                      <label for="inputImage" @click.stop>
                         <v-icon size="24">mdi-camera-plus</v-icon>
                       </label>
                     </v-btn>
@@ -251,7 +307,7 @@
                     id="inputImage"
                     class="d-none"
                     name="file"
-                    accept="image/*"
+                    accept="image/jpeg"
                     type="file"
                     multiple
                     @change="loadImage"
@@ -263,7 +319,11 @@
 
           <v-divider></v-divider>
 
-          <v-card-actions v-show="selectedImages.length > 0">
+          <v-card-actions v-show="selectedImages.length > 0" style="position: relative">
+            <v-btn absolute fab small elevation="3" style="top: -48px" @click="removeSeletedImage">
+              <v-icon>mdi-trash-can-outline</v-icon>
+            </v-btn>
+
             <v-container class="pa-0">
               <v-row dense class="ma-0">
                 <v-col cols="3">
@@ -358,10 +418,14 @@
 
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn text @click="uploadImage">
+            <v-btn text color="primary" @click="uploadImage" :disabled="!images.length">
               {{ $t("uploadImage.upload") }}
             </v-btn>
           </v-card-actions>
+
+          <v-overlay absolute :value="uploadingImage" opacity="0">
+            <v-progress-circular indeterminate color="primary"></v-progress-circular>
+          </v-overlay>
         </v-card>
       </v-dialog>
     </v-container>
@@ -391,11 +455,15 @@ export default {
       division: [{ label: "sec1" }, { label: "sec2" }],
       bodyPart: [{ label: "頭" }, { label: "手" }],
       timepoint: [{ label: "早上" }, { label: "下午" }],
-      category: [{ label: "傷口治療前傷口治療前" }, { label: "X-ray" }],
+      category: [{ label: "傷口治療前" }, { label: "X-ray" }],
       images: [],
+      greyMode: false,
       patientInfo: null,
       isPatientInfoLoading: false,
-      isUploadPhotoDialogOpen: false
+      isUploadPhotoDialogOpen: false,
+      uploadingImage: false,
+      successSnackbar: false,
+      failSnackbar: false
     };
   },
 
@@ -404,14 +472,22 @@ export default {
   },
 
   methods: {
+    removeSeletedImage() {
+      this.images = this.images.filter(image => !image.selected);
+    },
+    clearSelect() {
+      this.images.forEach(image => (image.selected = false));
+    },
+    selectAll() {
+      this.images.forEach(image => (image.selected = true));
+    },
     setSelectedImagesProperty(key, value) {
       this.selectedImages.forEach(image => {
         image[key] = value;
       });
     },
-    uploadImage() {
-      const apiUrl = "http://asia.ebmtech.com/StoreVideo/StoreImageAndVideo.ashx";
-
+    async uploadImage() {
+      const url = "http://asia.ebmtech.com/StoreVideo/StoreImageAndVideo.ashx";
       const params = {
         User: this.account,
         Password: "password",
@@ -419,39 +495,58 @@ export default {
         DeviceGUID: this.account,
         MimeType: "image/jpeg"
       };
+      const baseConfig = {
+        method: "post",
+        url,
+        params,
+        headers: {
+          "Content-Type": "image/jpeg"
+        }
+      };
 
-      axiosOriginal.post(apiUrl, "1234", { params });
+      const uploadingImages = [];
+      for (let i = 0; i < this.images.length; i++) {
+        const data = new FormData();
+        data.append("", this.images[i].raw);
+        const config = { ...baseConfig, data };
+        const uploadingImage = () => axiosOriginal(config);
+        uploadingImages.push(uploadingImage);
+      }
+
+      try {
+        this.uploadingImage = true;
+        await Promise.all(uploadingImages.map(uploadingImage => uploadingImage()));
+        this.successSnackbar = true;
+      } catch (error) {
+        console.log(error);
+        this.failSnackbar = true;
+      } finally {
+        this.uploadingImage = false;
+        this.isUploadPhotoDialogOpen = false;
+      }
     },
     async loadImage() {
       const images = this.$refs.inputedImage.files;
 
-      const imageToBase64 = async image => {
-        return new Promise((resolve, reject) => {
-          const reader = new FileReader();
-          reader.readAsDataURL(image);
-          reader.onload = () => {
-            resolve(reader.result);
-          };
-          reader.onError = reject;
-        });
-      };
-
       for (let i = 0; i < images.length; i++) {
-        const base64 = await imageToBase64(images[i]);
-        console.log(URL.createObjectURL(images[i]));
         const image = {
           division: null,
           timepoint: null,
           category: null,
           bodyPart: null,
           selected: false,
-          // base64: URL.createObjectURL(images[i])
-          base64
+          url: URL.createObjectURL(images[i]),
+          raw: images[i]
         };
         this.images.push(image);
       }
+
+      // reset input value，防止第二次選取相同照片時不會觸發 @change 事件
+      this.$refs.inputedImage.value = "";
     },
     openUploadPhotoDialog() {
+      this.images = [];
+      this.greyMode = false;
       this.isUploadPhotoDialogOpen = true;
     },
     closeUploadPhotoDialog() {

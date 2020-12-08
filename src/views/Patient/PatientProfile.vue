@@ -2,7 +2,7 @@
   <!-- <v-container fluid>
     <v-row>
       <v-col cols="12"> -->
-  <v-card v-if="!isDangerLoading" flat>
+  <v-card v-if="!isDangerLoading" >
     <v-container fluid v-if="danger">
       <v-row>
         <v-col cols="12">

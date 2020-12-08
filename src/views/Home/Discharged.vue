@@ -12,7 +12,7 @@
     <v-container fluid>
       <v-row>
         <v-col cols="12">
-          <!-- TODO: 考慮 date picker 是否抽成 component -->
+          <!-- TODO: date picker 抽成 component -->
           <v-menu offset-y :close-on-content-click="false" max-width="290" v-model="isDateMenuOpen">
             <template v-slot:activator="{ on, attrs }">
               <v-btn color="white" rounded large v-on="on" v-bind="attrs" width="100%" height="48">

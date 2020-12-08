@@ -92,7 +92,7 @@ const routes = [
   {
     path: "/",
     redirect() {
-      return translation.defaultLocale;
+      return { name: "Login", params: { locale: translation.defaultLocale } };
     }
   }
 ];

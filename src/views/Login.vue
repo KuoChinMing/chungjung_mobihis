@@ -25,6 +25,7 @@
                     :rules="[requiredRule]"
                     :error-messages="loginError"
                     @input="loginError = ''"
+                    :disabled="isLogining"
                     outlined
                     dense
                     autocomplete="account"
@@ -38,6 +39,7 @@
                     :rules="[requiredRule]"
                     :error-messages="loginError"
                     @input="loginError = ''"
+                    :disabled="isLogining"
                     outlined
                     dense
                     autocomplete="current-password"
@@ -47,7 +49,7 @@
                 </v-form>
               </v-card-text>
               <v-card-actions>
-                <v-btn text color="primary">{{ $t("login.register") }}</v-btn>
+                <v-btn text color="primary" :disabled="true">{{ $t("login.register") }}</v-btn>
                 <v-spacer></v-spacer>
                 <v-btn depressed color="primary" :loading="isLogining" type="submit" form="login">
                   {{ $t("login.login") }}

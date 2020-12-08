@@ -11,7 +11,6 @@
     <v-spacer></v-spacer>
 
     <!-- TODO: 換頁時 categorySearch 清空， blur, focus 優化 -->
-    <!-- <v-expand-x-transition> -->
     <div width="100%" v-show="isCategorySearchShowing">
       <CategorySearch
         light
@@ -24,7 +23,6 @@
         @search="search"
       />
     </div>
-    <!-- </v-expand-x-transition> -->
 
     <v-btn icon @click="toggleCategorySearch" v-show="!isCategorySearchShowing">
       <v-icon>mdi-magnify</v-icon>
