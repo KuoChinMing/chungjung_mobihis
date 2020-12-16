@@ -1,6 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import staticVar from "./staticVar.js";
+import uploadImage from "./uploadImage.js";
 import axiosOriginal from "axios";
 import axios from "@/plugins/axios.js";
 import jwt_decode from "jwt-decode";
@@ -71,5 +72,7 @@ export default new Vuex.Store({
       commit("token", token);
     }
   },
-  modules: {}
+  modules: {
+    uploadImage
+  }
 });

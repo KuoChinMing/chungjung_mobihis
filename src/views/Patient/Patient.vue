@@ -110,8 +110,9 @@
       </v-row>
 
       <!-- TODO upload photo dialog 包成 component -->
+      <!-- TODO 上傳防呆 -->
       <v-dialog v-model="isUploadPhotoDialogOpen" persistent scrollable>
-        <v-card :disabled="uploadingImage">
+        <v-card :disabled="uploadingImage" :loading="fetchingImageTags">
           <v-toolbar dense flat>
             <v-spacer></v-spacer>
             <v-icon @click="closeUploadPhotoDialog">mdi-close</v-icon>
@@ -184,7 +185,7 @@
                             <template v-slot:activator="{ on, attrs }">
                               <v-btn depressed v-bind="attrs" v-on="on" width="100%" @click.stop>
                                 <span v-if="image.division">
-                                  {{ image.division.label }}
+                                  {{ image.division.name }}
                                 </span>
                                 <span v-else>
                                   {{ $t("uploadImage.division") }}
@@ -195,11 +196,11 @@
                             <v-list dense>
                               <v-list-item-group v-model="image.division">
                                 <v-list-item
-                                  v-for="(division, index) in division"
+                                  v-for="(division, index) in imageTags.division"
                                   :key="index"
                                   :value="division"
                                 >
-                                  <v-list-item-title>{{ division.label }}</v-list-item-title>
+                                  <v-list-item-title>{{ division.name }}</v-list-item-title>
                                 </v-list-item>
                               </v-list-item-group>
                             </v-list>
@@ -210,7 +211,7 @@
                             <template v-slot:activator="{ on, attrs }">
                               <v-btn depressed v-bind="attrs" v-on="on" width="100%" @click.stop>
                                 <span v-if="image.bodyPart">
-                                  {{ image.bodyPart.label }}
+                                  {{ image.bodyPart.name }}
                                 </span>
                                 <span v-else>
                                   {{ $t("uploadImage.bodyPart") }}
@@ -221,11 +222,11 @@
                             <v-list dense>
                               <v-list-item-group v-model="image.bodyPart">
                                 <v-list-item
-                                  v-for="(bodyPart, index) in bodyPart"
+                                  v-for="(bodyPart, index) in imageTags.bodyPart"
                                   :key="index"
                                   :value="bodyPart"
                                 >
-                                  <v-list-item-title>{{ bodyPart.label }}</v-list-item-title>
+                                  <v-list-item-title>{{ bodyPart.name }}</v-list-item-title>
                                 </v-list-item>
                               </v-list-item-group>
                             </v-list>
@@ -235,23 +236,23 @@
                           <v-menu offset-y>
                             <template v-slot:activator="{ on, attrs }">
                               <v-btn depressed v-bind="attrs" v-on="on" width="100%" @click.stop>
-                                <span v-if="image.timepoint">
-                                  {{ image.timepoint.label }}
+                                <span v-if="image.timePoint">
+                                  {{ image.timePoint.name }}
                                 </span>
                                 <span v-else>
-                                  {{ $t("uploadImage.timepoint") }}
+                                  {{ $t("uploadImage.timePoint") }}
                                   <v-icon small>mdi-chevron-down</v-icon>
                                 </span>
                               </v-btn>
                             </template>
                             <v-list dense>
-                              <v-list-item-group v-model="image.timepoint">
+                              <v-list-item-group v-model="image.timePoint">
                                 <v-list-item
-                                  v-for="(timepoint, index) in timepoint"
+                                  v-for="(timePoint, index) in imageTags.timePoint"
                                   :key="index"
-                                  :value="timepoint"
+                                  :value="timePoint"
                                 >
-                                  <v-list-item-title>{{ timepoint.label }}</v-list-item-title>
+                                  <v-list-item-title>{{ timePoint.name }}</v-list-item-title>
                                 </v-list-item>
                               </v-list-item-group>
                             </v-list>
@@ -262,7 +263,7 @@
                             <template v-slot:activator="{ on, attrs }">
                               <v-btn depressed v-bind="attrs" v-on="on" width="100%" @click.stop>
                                 <span v-if="image.category">
-                                  {{ image.category.label }}
+                                  {{ image.category.name }}
                                 </span>
                                 <span v-else>
                                   {{ $t("uploadImage.category") }}
@@ -273,11 +274,11 @@
                             <v-list dense>
                               <v-list-item-group v-model="image.category">
                                 <v-list-item
-                                  v-for="(category, index) in category"
+                                  v-for="(category, index) in imageTags.category"
                                   :key="index"
                                   :value="category"
                                 >
-                                  <v-list-item-title>{{ category.label }}</v-list-item-title>
+                                  <v-list-item-title>{{ category.name }}</v-list-item-title>
                                 </v-list-item>
                               </v-list-item-group>
                             </v-list>
@@ -295,10 +296,11 @@
                     width="100%"
                     min-height="100"
                   >
-                    <v-btn icon x-large class="elevation-2">
-                      <label for="inputImage" @click.stop>
-                        <v-icon size="24">mdi-camera-plus</v-icon>
-                      </label>
+                    <!-- TODO label 有時候 click 不到 -->
+                    <v-btn icon x-large class="elevation-2" @click="$refs.inputedImage.click()">
+                      <!-- <label for="inputImage" @click.stop> -->
+                      <v-icon size="24">mdi-camera-plus</v-icon>
+                      <!-- </label> -->
                     </v-btn>
                   </v-card>
 
@@ -337,11 +339,11 @@
                     <v-list dense>
                       <v-list-item-group @change="setSelectedImagesProperty('division', $event)">
                         <v-list-item
-                          v-for="(division, index) in division"
+                          v-for="(division, index) in imageTags.division"
                           :key="index"
                           :value="division"
                         >
-                          <v-list-item-title>{{ division.label }}</v-list-item-title>
+                          <v-list-item-title>{{ division.name }}</v-list-item-title>
                         </v-list-item>
                       </v-list-item-group>
                     </v-list>
@@ -358,11 +360,11 @@
                     <v-list dense>
                       <v-list-item-group @change="setSelectedImagesProperty('bodyPart', $event)">
                         <v-list-item
-                          v-for="(bodyPart, index) in bodyPart"
+                          v-for="(bodyPart, index) in imageTags.bodyPart"
                           :key="index"
                           :value="bodyPart"
                         >
-                          <v-list-item-title>{{ bodyPart.label }}</v-list-item-title>
+                          <v-list-item-title>{{ bodyPart.name }}</v-list-item-title>
                         </v-list-item>
                       </v-list-item-group>
                     </v-list>
@@ -372,18 +374,18 @@
                   <v-menu offset-y>
                     <template v-slot:activator="{ on, attrs }">
                       <v-btn depressed v-bind="attrs" v-on="on" width="100%">
-                        {{ $t("uploadImage.timepoint") }}
+                        {{ $t("uploadImage.timePoint") }}
                         <v-icon small>mdi-chevron-down</v-icon>
                       </v-btn>
                     </template>
                     <v-list dense>
-                      <v-list-item-group @change="setSelectedImagesProperty('timepoint', $event)">
+                      <v-list-item-group @change="setSelectedImagesProperty('timePoint', $event)">
                         <v-list-item
-                          v-for="(timepoint, index) in timepoint"
+                          v-for="(timePoint, index) in imageTags.timePoint"
                           :key="index"
-                          :value="timepoint"
+                          :value="timePoint"
                         >
-                          <v-list-item-title>{{ timepoint.label }}</v-list-item-title>
+                          <v-list-item-title>{{ timePoint.name }}</v-list-item-title>
                         </v-list-item>
                       </v-list-item-group>
                     </v-list>
@@ -400,11 +402,11 @@
                     <v-list dense>
                       <v-list-item-group @change="setSelectedImagesProperty('category', $event)">
                         <v-list-item
-                          v-for="(category, index) in category"
+                          v-for="(category, index) in imageTags.category"
                           :key="index"
                           :value="category"
                         >
-                          <v-list-item-title>{{ category.label }}</v-list-item-title>
+                          <v-list-item-title>{{ category.name }}</v-list-item-title>
                         </v-list-item>
                       </v-list-item-group>
                     </v-list>
@@ -435,7 +437,6 @@
 <script>
 import utils from "@/utils/utils.js";
 import { mapState } from "vuex";
-import axiosOriginal from "axios";
 
 export default {
   name: "Patient",
@@ -443,7 +444,9 @@ export default {
   computed: {
     ...mapState({
       newPatientInfo: "patientInfo",
-      account: "account"
+      account: "account",
+      imageTags: ({ uploadImage }) => uploadImage.imageTags,
+      fetchedImageTag: ({ uploadImage }) => uploadImage.fetchedImageTag
     }),
     selectedImages() {
       return this.images.filter(image => image.selected);
@@ -452,13 +455,10 @@ export default {
 
   data() {
     return {
-      division: [{ label: "sec1" }, { label: "sec2" }],
-      bodyPart: [{ label: "頭" }, { label: "手" }],
-      timepoint: [{ label: "早上" }, { label: "下午" }],
-      category: [{ label: "傷口治療前" }, { label: "X-ray" }],
       images: [],
       greyMode: false,
       patientInfo: null,
+      fetchingImageTags: false,
       isPatientInfoLoading: false,
       isUploadPhotoDialogOpen: false,
       uploadingImage: false,
@@ -482,34 +482,41 @@ export default {
       this.images.forEach(image => (image.selected = true));
     },
     setSelectedImagesProperty(key, value) {
-      this.selectedImages.forEach(image => {
-        image[key] = value;
-      });
+      this.selectedImages.forEach(image => (image[key] = value));
     },
-    async uploadImage() {
-      const url = "http://asia.ebmtech.com/StoreVideo/StoreImageAndVideo.ashx";
-      const params = {
+    async fetchImagesTag() {
+      const apiParams = {
         User: this.account,
         Password: "password",
         PtnID: this.patientInfo.CHTNO,
         DeviceGUID: this.account,
         MimeType: "image/jpeg"
       };
-      const baseConfig = {
-        method: "post",
-        url,
-        params,
-        headers: {
-          "Content-Type": "image/jpeg"
-        }
+
+      await this.$store.dispatch("fetchImagesTag", apiParams);
+    },
+    async uploadImage() {
+      const baseParams = {
+        User: this.account,
+        Password: "password",
+        PtnID: this.patientInfo.CHTNO,
+        DeviceGUID: this.account,
+        MimeType: "image/jpeg"
       };
 
       const uploadingImages = [];
       for (let i = 0; i < this.images.length; i++) {
-        const data = new FormData();
-        data.append("", this.images[i].raw);
-        const config = { ...baseConfig, data };
-        const uploadingImage = () => axiosOriginal(config);
+        const image = new FormData();
+        image.append("", this.images[i].raw);
+        const { bodyPart, category, division, timePoint } = this.images[i];
+        const params = {
+          ...baseParams,
+          bodyPart: bodyPart.name,
+          category: category.name,
+          division: division.name,
+          timePoint: timePoint.name
+        };
+        const uploadingImage = () => this.$store.dispatch("uploadImage", { params, image });
         uploadingImages.push(uploadingImage);
       }
 
@@ -531,7 +538,7 @@ export default {
       for (let i = 0; i < images.length; i++) {
         const image = {
           division: null,
-          timepoint: null,
+          timePoint: null,
           category: null,
           bodyPart: null,
           selected: false,
@@ -544,9 +551,22 @@ export default {
       // reset input value，防止第二次選取相同照片時不會觸發 @change 事件
       this.$refs.inputedImage.value = "";
     },
-    openUploadPhotoDialog() {
+    async openUploadPhotoDialog() {
       this.images = [];
       this.greyMode = false;
+
+      if (!this.fetchedImageTag) {
+        try {
+          this.fetchingImageTags = true;
+          await this.fetchImagesTag();
+          this.$store.commit("fetchedImagesTags", true);
+        } catch (error) {
+          console.log(error);
+        } finally {
+          this.fetchingImageTags = false;
+        }
+      }
+
       this.isUploadPhotoDialogOpen = true;
     },
     closeUploadPhotoDialog() {
