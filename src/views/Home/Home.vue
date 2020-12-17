@@ -79,7 +79,7 @@ export default {
   methods: {
     async getPatientList(qryType, parameter) {
       let patientList = [];
-
+      
       try {
         this.isPatientListLoading = true;
         const params = { requestID: this.account, qryType, parameter };

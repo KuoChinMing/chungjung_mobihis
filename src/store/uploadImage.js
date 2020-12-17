@@ -19,12 +19,12 @@ const uploadImage = {
 
   actions: {
     async fetchImagesTag({ commit }, params) {
-      const url = "http://asia.ebmtech.com/StoreVideo/StoreImageAndVideo.ashx";
+      const url = GLOBAL_CONFIG.UPLOAD_IMAGE_URL; // eslint-disable-line no-undef
       const { data: imageTags } = await axiosOriginal.get(url, params);
       commit("imageTags", imageTags);
     },
     async uploadImage(_, { params, image }) {
-      const url = "http://asia.ebmtech.com/StoreVideo/StoreImageAndVideo.ashx";
+      const url = GLOBAL_CONFIG.UPLOAD_IMAGE_URL; // eslint-disable-line no-undef
       const config = {
         method: "post",
         url,

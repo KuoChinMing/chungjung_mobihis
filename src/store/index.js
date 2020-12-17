@@ -63,7 +63,7 @@ export default new Vuex.Store({
       const loginParams = { userID: account, password };
       const loginResponse = await axios.get("/api/Token/Login", { params: loginParams });
       const encryptedToken = loginResponse.data.Token;
-      const BASE_URL = process.env.VUE_APP_BASE_URL;
+      const BASE_URL = GLOBAL_CONFIG.BASE_URL; // eslint-disable-line no-undef
       const { data: token } = await axiosOriginal.get(`${BASE_URL}/api/Token/Decrypt`, {
         params: { text: encryptedToken }
       });

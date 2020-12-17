@@ -511,10 +511,10 @@ export default {
         const { bodyPart, category, division, timePoint } = this.images[i];
         const params = {
           ...baseParams,
-          bodyPart: bodyPart.name,
-          category: category.name,
-          division: division.name,
-          timePoint: timePoint.name
+          BodyPart: bodyPart.name,
+          StudyDesc: category.name,
+          DepartmentName: division.name,
+          ImageComment: timePoint.name
         };
         const uploadingImage = () => this.$store.dispatch("uploadImage", { params, image });
         uploadingImages.push(uploadingImage);

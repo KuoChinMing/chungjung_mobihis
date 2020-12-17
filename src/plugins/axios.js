@@ -1,13 +1,12 @@
 import axios from "axios";
 
 const axiosInstrance = axios.create({
-  baseURL: process.env.VUE_APP_BASE_URL
+  baseURL: GLOBAL_CONFIG.BASE_URL // eslint-disable-line no-undef
 });
 
 async function EncryptData(data) {
   const EncryptedObj = JSON.parse(JSON.stringify(data));
-
-  const BASE_URL = process.env.VUE_APP_BASE_URL;
+  const BASE_URL = GLOBAL_CONFIG.BASE_URL; // eslint-disable-line no-undef
   const encrypting = data => async () =>
     await axios.get(`${BASE_URL}/api/Token/Crypt`, { params: { text: data } });
   const encryptingData = Object.values(EncryptedObj).map(data => encrypting(data));
