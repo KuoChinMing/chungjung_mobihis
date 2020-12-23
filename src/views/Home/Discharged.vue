@@ -63,7 +63,7 @@ export default {
   },
 
   computed: {
-    ...mapState(["account"]),
+    ...mapState(["userId"]),
     dateRangeText() {
       const [startDate, endDate] = this.dateRange;
 
@@ -115,9 +115,9 @@ export default {
       try {
         this.isPatientListLoading = true;
         const params = {
-          requestID: this.account,
+          requestID: this.userId,
           qryType: "DR",
-          parameter: this.account,
+          parameter: this.userId,
           disFlag: "1",
           sDate: this.dateRange[0],
           eDate: this.dateRange[1]

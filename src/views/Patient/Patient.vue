@@ -111,7 +111,7 @@
 
       <!-- TODO upload photo dialog 包成 component -->
       <!-- TODO 上傳防呆 -->
-      <v-dialog v-model="isUploadPhotoDialogOpen" persistent scrollable>
+      <v-dialog v-model="isUploadPhotoDialogOpen" persistent scrollable >
         <v-card :disabled="uploadingImage" :loading="fetchingImageTags">
           <v-toolbar dense flat>
             <v-spacer></v-spacer>
@@ -444,7 +444,7 @@ export default {
   computed: {
     ...mapState({
       newPatientInfo: "patientInfo",
-      account: "account",
+      userId: "userId",
       imageTags: ({ uploadImage }) => uploadImage.imageTags,
       fetchedImageTag: ({ uploadImage }) => uploadImage.fetchedImageTag
     }),
@@ -486,10 +486,10 @@ export default {
     },
     async fetchImagesTag() {
       const apiParams = {
-        User: this.account,
+        User: this.userId,
         Password: "password",
         PtnID: this.patientInfo.CHTNO,
-        DeviceGUID: this.account,
+        DeviceGUID: this.userId,
         MimeType: "image/jpeg"
       };
 
@@ -497,10 +497,10 @@ export default {
     },
     async uploadImage() {
       const baseParams = {
-        User: this.account,
+        User: this.userId,
         Password: "password",
         PtnID: this.patientInfo.CHTNO,
-        DeviceGUID: this.account,
+        DeviceGUID: this.userId,
         MimeType: "image/jpeg"
       };
 

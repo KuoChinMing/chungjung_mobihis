@@ -40,7 +40,7 @@ export default {
   },
 
   computed: {
-    ...mapState(["account"]),
+    ...mapState(["userId"]),
     ...mapGetters(["searchCategories"]),
     pageTitle() {
       const { qryType, parameter } = this.$route.query;
@@ -69,7 +69,7 @@ export default {
         if (qryType || parameter) {
           this.patientList = await this.getPatientList(qryType, parameter);
         } else {
-          this.patientList = await this.getPatientList("DR", this.account);
+          this.patientList = await this.getPatientList("DR", this.userId);
         }
       },
       immediate: true
@@ -79,10 +79,10 @@ export default {
   methods: {
     async getPatientList(qryType, parameter) {
       let patientList = [];
-      
+
       try {
         this.isPatientListLoading = true;
-        const params = { requestID: this.account, qryType, parameter };
+        const params = { requestID: this.userId, qryType, parameter };
         const res = await axios.get("/api/AdmissionPatient", { params });
         patientList = res.data;
       } catch (error) {

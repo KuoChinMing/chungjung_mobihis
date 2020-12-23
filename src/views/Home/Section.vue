@@ -40,7 +40,7 @@ export default {
   },
 
   computed: {
-    ...mapState(["account", "sectionList"]),
+    ...mapState(["userId", "sectionList"]),
     pageTitle() {
       const dpCode = this.$route.params.section;
       const section = this.sectionList.find(section => section.DpCode === dpCode);
@@ -67,7 +67,7 @@ export default {
 
       try {
         this.isPatientListLoading = true;
-        const params = { requestID: this.account, qryType, parameter };
+        const params = { requestID: this.userId, qryType, parameter };
         const res = await axios.get("/api/AdmissionPatient", { params });
         patientList = res.data;
       } catch (error) {

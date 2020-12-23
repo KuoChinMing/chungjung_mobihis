@@ -4,27 +4,33 @@ import staticVar from "./staticVar.js";
 import uploadImage from "./uploadImage.js";
 import axiosOriginal from "axios";
 import axios from "@/plugins/axios.js";
-import jwt_decode from "jwt-decode";
+// import jwt_decode from "jwt-decode";
 
 Vue.use(Vuex);
 
-const token = localStorage.getItem("token") || null;
-const tokenPayload = token ? jwt_decode(token) : {};
+// 解 jwtToken 拿 token payload
+// const token = localStorage.getItem("token") || null;
+// const tokenPayload = token ? jwt_decode(token) : {};
 // console.log(tokenPayload);
 
 export default new Vuex.Store({
   state: {
-    homeNavigationDrawer: false,
-    token: token,
+    token: localStorage.getItem("token") || null,
+    userId: localStorage.getItem["userId"] || "",
     sectionList: [],
     stationList: [],
     patientInfo: null,
-    account: tokenPayload["unique_name"] || ""
+    homeNavigationDrawer: false
+    // account: tokenPayload["unique_name"] || "",
   },
   getters: {
     ...staticVar.getters
   },
   mutations: {
+    userId(state, userId) {
+      state.userId = userId;
+      localStorage.setItem("userId", userId);
+    },
     account(state, account) {
       state.account = account;
     },
@@ -59,16 +65,23 @@ export default new Vuex.Store({
       const { data: patientInfo } = await axios.get("/api/PatientInfo", { params });
       commit("patientInfo", patientInfo);
     },
-    async login({ commit }, { account, password }) {
-      const loginParams = { userID: account, password };
-      const loginResponse = await axios.get("/api/Token/Login", { params: loginParams });
-      const encryptedToken = loginResponse.data.Token;
+    async decrypt(_, encryptedData) {
       const BASE_URL = GLOBAL_CONFIG.BASE_URL; // eslint-disable-line no-undef
-      const { data: token } = await axiosOriginal.get(`${BASE_URL}/api/Token/Decrypt`, {
-        params: { text: encryptedToken }
+      return await axiosOriginal.get(`${BASE_URL}/api/Token/Decrypt`, {
+        params: { text: encryptedData }
       });
+    },
+    async login({ commit, dispatch }, { account, password }) {
+      const loginParams = { userID: account, password };
+      const { data: loginResponse } = await axios.get("/api/Token/Login", { params: loginParams });
+      const { Token: encryptedToken, ID: encryptedId } = loginResponse;
+      const [{ data: token }, { data: userId }] = await Promise.all([
+        dispatch("decrypt", encryptedToken),
+        dispatch("decrypt", encryptedId)
+      ]);
 
       commit("account", account);
+      commit("userId", userId);
       commit("token", token);
     }
   },

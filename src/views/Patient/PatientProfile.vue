@@ -2,7 +2,7 @@
   <!-- <v-container fluid>
     <v-row>
       <v-col cols="12"> -->
-  <v-card v-if="!isDangerLoading" >
+  <v-card v-if="!isDangerLoading">
     <v-container fluid v-if="danger">
       <v-row>
         <v-col cols="12">
@@ -142,7 +142,7 @@ export default {
   },
 
   computed: {
-    ...mapState(["account", "patientInfo"])
+    ...mapState(["userId", "patientInfo"])
   },
 
   watch: {
@@ -161,10 +161,10 @@ export default {
 
   methods: {
     async getPatientProfile() {
-      // const params = { requestID: this.account, chtno: patientId, admissionKey };
+      // const params = { requestID: this.userId, chtno: patientId, admissionKey };
       // const res = await axios.get("/api/PatientDanger", { params });
       const { CHTNO: chtno, AdmissionKey: admission, InHosDate: hosDate } = this.patientInfo;
-      const params = { requestID: this.account, chtno, admission, hosDate };
+      const params = { requestID: this.userId, chtno, admission, hosDate };
       const { data: patientProfile } = await axios.get("/api/PatientSummary", { params });
 
       return patientProfile;
