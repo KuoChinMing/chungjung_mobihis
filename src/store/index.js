@@ -16,7 +16,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     token: localStorage.getItem("token") || null,
-    userId: localStorage.getItem["userId"] || "",
+    userId: localStorage.getItem("userId") || "",
     sectionList: [],
     stationList: [],
     patientInfo: null,

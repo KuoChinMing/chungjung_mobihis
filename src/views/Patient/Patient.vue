@@ -111,7 +111,7 @@
 
       <!-- TODO upload photo dialog 包成 component -->
       <!-- TODO 上傳防呆 -->
-      <v-dialog v-model="isUploadPhotoDialogOpen" persistent scrollable >
+      <v-dialog v-model="isUploadPhotoDialogOpen" persistent scrollable>
         <v-card :disabled="uploadingImage" :loading="fetchingImageTags">
           <v-toolbar dense flat>
             <v-spacer></v-spacer>
@@ -323,7 +323,7 @@
 
           <v-card-actions v-show="selectedImages.length > 0" style="position: relative">
             <v-btn absolute fab small elevation="3" style="top: -48px" @click="removeSeletedImage">
-              <v-icon>mdi-trash-can-outline</v-icon>
+              <v-icon color="grey darken-1">mdi-trash-can-outline</v-icon>
             </v-btn>
 
             <v-container class="pa-0">
@@ -391,6 +391,7 @@
                     </v-list>
                   </v-menu>
                 </v-col>
+
                 <v-col cols="3">
                   <v-menu offset-y>
                     <template v-slot:activator="{ on, attrs }">
@@ -498,7 +499,8 @@ export default {
     async uploadImage() {
       const baseParams = {
         User: this.userId,
-        Password: "password",
+        // TODO
+        Password: "EBM_DEMO",
         PtnID: this.patientInfo.CHTNO,
         DeviceGUID: this.userId,
         MimeType: "image/jpeg"
@@ -511,11 +513,12 @@ export default {
         const { bodyPart, category, division, timePoint } = this.images[i];
         const params = {
           ...baseParams,
-          BodyPart: bodyPart.name,
-          StudyDesc: category.name,
-          DepartmentName: division.name,
-          ImageComment: timePoint.name
+          BodyPart: bodyPart?.name,
+          StudyDesc: category?.name,
+          DepartmentName: division?.name,
+          ImageComment: timePoint?.name
         };
+
         const uploadingImage = () => this.$store.dispatch("uploadImage", { params, image });
         uploadingImages.push(uploadingImage);
       }
